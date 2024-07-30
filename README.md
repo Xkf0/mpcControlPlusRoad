@@ -22,4 +22,4 @@ g++ -I /usr/include/eigen3 -I /usr/include -o main main.cpp -lnlopt
 ## Results Display
 Below is an image showcasing the results of running the code:
 
-| <img height="469" src="figure/trajectory_plot.png" width="781.5"/> |
+<img height="469" src="figure/trajectory_plot.png" width="781.5"/>
