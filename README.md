@@ -1,4 +1,4 @@
-# FRABSM: Sample Mining Guided Adaptive Loss for Face Recognition
+# FRABSM: Sample Mining Guided Adaptive Loss
 
 Github repository for FRABSM: A Robust Face Recognition Model based Sample Mining and Loss Functions.
 
