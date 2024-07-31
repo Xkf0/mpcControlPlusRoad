@@ -4,6 +4,10 @@
 
 This is an MPC (Model Predictive Control)-based control and obstacle avoidance project that utilizes the Eigen and NLopt libraries for matrix calculations and nonlinear optimization. The project includes source files, which demonstrates the application of the MPC algorithm in robot control and obstacle avoidance.
 
+## Kinematic Modeling Diagram
+
+<img height="385" src="figure/kinematic_modeling_diagram.jpg" width="533"/>
+
 ## Installing Dependencies and Running the Project
 
 Before running this project, make sure to install the Eigen and NLopt libraries. Below are the installation steps and instructions on how to compile and run the project.
