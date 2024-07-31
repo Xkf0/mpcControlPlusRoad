@@ -34,4 +34,4 @@ Below is an image showcasing the results of running the code.
 
 The actual landed historical data is stored in the root directory in a file named `historicalDataActualLanding.txt`.
 
-<img height="240" src="figure/controlTruth.png" width="400"/>  <img height="240" src="figure/controlTruth0.png" width="400"/>
+<img height="240" src="figure/controlTruth.jpg" width="400"/>  <img height="240" src="figure/controlTruth0.jpg" width="400"/>
