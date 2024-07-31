@@ -42,7 +42,7 @@ y_data = [];
 for i = 1:size(poses, 1)
     if i > 1 && pose_indices(i) < pose_indices(i-1)
         % 如果当前pose序号小于前一个pose序号，绘制之前的数据并重置绘图数组
-        plot(x_data, y_data, 'o-', 'DisplayName', '轨迹'); % 绘制轨迹
+        plot(x_data, y_data, 'o-', 'DisplayName', 'Trajectory'); % 绘制轨迹
         hold on;
         x_data = [];
         y_data = [];
@@ -54,7 +54,7 @@ end
 
 % 绘制最后一段轨迹
 if ~isempty(x_data) && ~isempty(y_data)
-    plot(x_data, y_data, 'o-', 'DisplayName', '轨迹'); % 绘制轨迹
+    plot(x_data, y_data, 'o-', 'DisplayName', 'Trajectory'); % 绘制轨迹
 end
 
 % 保持当前图形以绘制目标路线
@@ -68,26 +68,27 @@ xc = 10; % 圆心x坐标
 yc = 0; % 圆心y坐标
 x = xc + r*cos(theta);
 y = yc + r*sin(theta);
-plot(x, y, 'r--', 'DisplayName', '目标路线'); % 绘制圆弧
+plot(x, y, 'r--', 'DisplayName', 'Target Route'); % 绘制圆弧
 
 r = 10; % 半径
 xc = 10; % 圆心x坐标
 yc = 20; % 圆心y坐标
 x = xc - r*cos(theta);
 y = yc - r*sin(theta);
-plot(x, y, 'r--', 'DisplayName', '目标路线'); % 绘制圆弧
+h1 = plot(x, y, 'r--'); % 绘制圆弧
+set(get(get(h1,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
 
 % 绘制障碍物
-plot(0, 2, 'p', 'MarkerSize', 10, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'none'); % 空心星星
-plot(10, 10, 'p', 'MarkerSize', 10, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'none'); % 空心星星
+plot(0, 2, 'p', 'MarkerSize', 10, 'MarkerEdgeColor', 'm', 'MarkerFaceColor', 'none', 'DisplayName', 'Obstacle1'); % 空心星星
+plot(10, 10, 'p', 'MarkerSize', 10, 'MarkerEdgeColor', 'g', 'MarkerFaceColor', 'none', 'DisplayName', 'Obstacle2'); % 空心星星
 
 % 设置图例
 legend;
 
 % 设置图表标题和坐标轴标签
-title('轨迹与目标路线对比');
-xlabel('x坐标');
-ylabel('y坐标');
+title('Trajectory and Target Route Comparison Plot');
+xlabel('x');
+ylabel('y');
 grid on;
 
 % 保存图像
