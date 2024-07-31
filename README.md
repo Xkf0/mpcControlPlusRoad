@@ -1,16 +1,14 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
 # MPC-Based Control and Obstacle Avoidance Project
 
-## <i class="fas fa-info-circle"></i> Introduction
+## 📌 Introduction
 
 This is an MPC (Model Predictive Control)-based control and obstacle avoidance project that utilizes the Eigen and NLopt libraries for matrix calculations and nonlinear optimization. The project includes source files, which demonstrates the application of the MPC algorithm in robot control and obstacle avoidance.
 
-## Kinematic Modeling Diagram
+## 🖼️ Kinematic Modeling Diagram
 
 <img height="300" src="figure/kinematic_modeling_diagram.jpg" width="400"/>
 
-## Installing Dependencies and Running the Project
+## 🚀 Installing Dependencies and Running the Project
 
 Before running this project, make sure to install the Eigen and NLopt libraries. Below are the installation steps and instructions on how to compile and run the project.
 
@@ -25,7 +23,7 @@ g++ -I /usr/include/eigen3 -I /usr/include -o main main.cpp -lnlopt
 ./main
 ```
 
-## Results Display
+## 🎉 Results Display
 Below is an image showcasing the results of running the code.
 
 ### Simulation Image
