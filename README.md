@@ -24,10 +24,12 @@ g++ -I /usr/include/eigen3 -I /usr/include -o main main.cpp -lnlopt
 ```
 
 ## Results Display
-Below is an image showcasing the results of running the code. The first part is the simulation image, 
+Below is an image showcasing the results of running the code.
+
+### Simulation Image
 
 <img height="469" src="figure/trajectory_plot.png" width="781.5"/>
 
-and the second part is the actual landing image.
+### Actual Landing Image
 
 <img height="240" src="figure/controlTruth.png" width="400"/>  <img height="240" src="figure/controlTruth0.png" width="400"/>
