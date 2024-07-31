@@ -39,3 +39,16 @@ The actual landed historical data is stored in the root directory in a file name
 ## 📢 Acknowledgments
 
 I would like to express my sincere gratitude to Xinke Liu for her invaluable support and contributions to this project.
+
+## 🛡️ Cite
+
+If you find this project useful in your research, please consider citing:
+
+```bibtex
+@misc{mpcControlPlusRoad,
+  title={MPC Multi-Vehicle Collaboration},
+  author={MPC Multi-Vehicle Collaboration Contributors},
+  howpublished = {\url{https://github.com/Xkf0/mpcControlPlusRoad}},
+  year={2024}
+}
+```
