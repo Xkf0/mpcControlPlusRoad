@@ -26,4 +26,4 @@ Below is an image showcasing the results of running the code. The first part is 
 
 and the second part is the actual landing image.
 
-<img height="180" src="figure/controlTruth.jpg" width="300"/>  <img height="180" src="figure/controlTruth0.jpg" width="300"/>
+<img height="240" src="figure/controlTruth.png" width="400"/>  <img height="240" src="figure/controlTruth0.png" width="400"/>
