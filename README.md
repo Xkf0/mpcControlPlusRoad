@@ -6,7 +6,7 @@ This is an MPC (Model Predictive Control)-based control and obstacle avoidance p
 
 ## Kinematic Modeling Diagram
 
-<img height="385" src="figure/kinematic_modeling_diagram.jpg" width="533"/>
+<img height="300" src="figure/kinematic_modeling_diagram.jpg" width="400"/>
 
 ## Installing Dependencies and Running the Project
 
