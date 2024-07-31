@@ -1,10 +1,10 @@
 #include "mpc_road.h"
 C_MPC_ROAD::C_MPC_ROAD(double _d_q, double _d_r, Eigen::VectorXd _v_aymin, Eigen::VectorXd _v_aymax, int _i_Nc, int _i_Np, double _d_T, double _d_zeta, double _d_Sob, int _i_num)
     : d_q(_d_q),
-    d_r(_d_r),
-    v_aymin(_v_aymin),
-    v_aymax(_v_aymax),
-    i_num(_i_num)
+      d_r(_d_r),
+      v_aymin(_v_aymin),
+      v_aymax(_v_aymax),
+      i_num(_i_num)
 {
     optData.i_Nc = _i_Nc;
     optData.i_Np = _i_Np;
@@ -14,7 +14,7 @@ C_MPC_ROAD::C_MPC_ROAD(double _d_q, double _d_r, Eigen::VectorXd _v_aymin, Eigen
     vd_x.assign(_i_Nc, 0.0);
 }
 
-static C_MPC_ROAD& GetOnlyCmpc(double _d_q, double _d_r, Eigen::VectorXd _v_aymin, Eigen::VectorXd _v_aymax, int _i_Nc, int _i_Np, double _d_T, double _d_zeta, double _d_Sob, int _i_num)
+static C_MPC_ROAD &GetOnlyCmpc(double _d_q, double _d_r, Eigen::VectorXd _v_aymin, Eigen::VectorXd _v_aymax, int _i_Nc, int _i_Np, double _d_T, double _d_zeta, double _d_Sob, int _i_num)
 {
     // 懒汉模式，不适合多线程
     static C_MPC_ROAD onlyInstance(_d_q, _d_r, _v_aymin, _v_aymax, _i_Nc, _i_Np, _d_T, _d_zeta, _d_Sob, _i_num);
@@ -22,18 +22,18 @@ static C_MPC_ROAD& GetOnlyCmpc(double _d_q, double _d_r, Eigen::VectorXd _v_aymi
 }
 
 // 复制构造函数，若放到private里面则不允许复制
-C_MPC_ROAD::C_MPC_ROAD(const C_MPC_ROAD& other)
+C_MPC_ROAD::C_MPC_ROAD(const C_MPC_ROAD &other)
     : d_q(other.d_q),
-    d_r(other.d_r),
-    v_aymin(other.v_aymin),
-    v_aymax(other.v_aymax),
-    vd_x(other.vd_x),
-    optData(other.optData)
+      d_r(other.d_r),
+      v_aymin(other.v_aymin),
+      v_aymax(other.v_aymax),
+      vd_x(other.vd_x),
+      optData(other.optData)
 {
 }
 
 // 复制赋值运算符
-C_MPC_ROAD& C_MPC_ROAD::operator=(const C_MPC_ROAD& other)
+C_MPC_ROAD &C_MPC_ROAD::operator=(const C_MPC_ROAD &other)
 {
     if (this != &other) // 防止自赋值
     {
@@ -49,19 +49,19 @@ C_MPC_ROAD& C_MPC_ROAD::operator=(const C_MPC_ROAD& other)
 }
 
 // 移动构造函数
-C_MPC_ROAD::C_MPC_ROAD(C_MPC_ROAD&& other) noexcept
+C_MPC_ROAD::C_MPC_ROAD(C_MPC_ROAD &&other) noexcept
     : d_q(other.d_q),
-    d_r(other.d_r),
-    v_aymin(std::move(other.v_aymin)),
-    v_aymax(std::move(other.v_aymax)),
-    vd_x(std::move(other.vd_x)),
-    i_num(std::move(other.i_num)),
-    optData(std::move(other.optData))
+      d_r(other.d_r),
+      v_aymin(std::move(other.v_aymin)),
+      v_aymax(std::move(other.v_aymax)),
+      vd_x(std::move(other.vd_x)),
+      i_num(std::move(other.i_num)),
+      optData(std::move(other.optData))
 {
 }
 
 // 移动赋值运算符
-C_MPC_ROAD& C_MPC_ROAD::operator=(C_MPC_ROAD&& other) noexcept
+C_MPC_ROAD &C_MPC_ROAD::operator=(C_MPC_ROAD &&other) noexcept
 {
     if (this != &other) // 防止自赋值
     {
@@ -83,7 +83,7 @@ C_MPC_ROAD::~C_MPC_ROAD()
 
 bool C_MPC_ROAD::set_q_r(double _d_q, double _d_r)
 {
-    if(_d_q > 0 && _d_r > 0)
+    if (_d_q > 0 && _d_r > 0)
     {
         d_q = _d_q;
         d_r = _d_r;
@@ -94,7 +94,7 @@ bool C_MPC_ROAD::set_q_r(double _d_q, double _d_r)
 
 bool C_MPC_ROAD::set_aymin_aymax(Eigen::VectorXd _v_aymin, Eigen::VectorXd _v_aymax)
 {
-    if(_v_aymin.size() != 0 && _v_aymax.size() != 0)
+    if (_v_aymin.size() != 0 && _v_aymax.size() != 0)
     {
         v_aymin = _v_aymin;
         v_aymax = _v_aymax;
@@ -105,7 +105,7 @@ bool C_MPC_ROAD::set_aymin_aymax(Eigen::VectorXd _v_aymin, Eigen::VectorXd _v_ay
 
 bool C_MPC_ROAD::set_Nc_Np(int _i_Nc, int _i_Np)
 {
-    if(_i_Nc > 0 && _i_Np > 0)
+    if (_i_Nc > 0 && _i_Np > 0)
     {
         optData.i_Nc = _i_Nc;
         optData.i_Np = _i_Np;
@@ -116,7 +116,7 @@ bool C_MPC_ROAD::set_Nc_Np(int _i_Nc, int _i_Np)
 
 bool C_MPC_ROAD::set_T(double _d_T)
 {
-    if(_d_T > 0)
+    if (_d_T > 0)
     {
         optData.d_T = _d_T;
         return true;
@@ -126,7 +126,7 @@ bool C_MPC_ROAD::set_T(double _d_T)
 
 bool C_MPC_ROAD::set_pathWithAngleRef(std::vector<robos::Pose2D> _pathsWithAngleRef)
 {
-    if(_pathsWithAngleRef.size() != 0)
+    if (_pathsWithAngleRef.size() != 0)
     {
         pathsWithAngleRef = _pathsWithAngleRef;
         return true;
@@ -136,7 +136,7 @@ bool C_MPC_ROAD::set_pathWithAngleRef(std::vector<robos::Pose2D> _pathsWithAngle
 
 bool C_MPC_ROAD::set_zeta_Sob(double _d_zeta, double _d_Sob)
 {
-    if(_d_zeta > 0 && _d_Sob > 0)
+    if (_d_zeta > 0 && _d_Sob > 0)
     {
         optData.d_zeta = _d_zeta;
         optData.d_Sob = _d_Sob;
@@ -147,7 +147,7 @@ bool C_MPC_ROAD::set_zeta_Sob(double _d_zeta, double _d_Sob)
 
 bool C_MPC_ROAD::set_N(int _i_N)
 {
-    if(_i_N > 0)
+    if (_i_N > 0)
     {
         optData.i_N = _i_N;
         return true;
@@ -157,7 +157,7 @@ bool C_MPC_ROAD::set_N(int _i_N)
 
 bool C_MPC_ROAD::set_num(int _i_num)
 {
-    if(_i_num > 0)
+    if (_i_num > 0)
     {
         i_num = _i_num;
         return true;
@@ -176,7 +176,7 @@ bool C_MPC_ROAD::set_poseNow(double d_x0, double d_y0, double d_theta0, double d
 
 bool C_MPC_ROAD::set_sideOb(Eigen::VectorXd _v_sideOb)
 {
-    if(_v_sideOb.size() != 0)
+    if (_v_sideOb.size() != 0)
     {
         optData.v_sideOb = _v_sideOb;
         optData.i_N = _v_sideOb.size() / 2;
@@ -188,7 +188,7 @@ bool C_MPC_ROAD::set_sideOb(Eigen::VectorXd _v_sideOb)
 Eigen::VectorXd C_MPC_ROAD::calculate_coordinateConversionToWorld(double d_x, double d_y, double d_alpha, double d_dx, double d_dy)
 {
     Eigen::Matrix<double, 3, 3> _m_T_inverse;
-    _m_T_inverse << cos(d_alpha), - sin(d_alpha), d_dx, sin(d_alpha), cos(d_alpha), d_dy, 0, 0, 1;
+    _m_T_inverse << cos(d_alpha), -sin(d_alpha), d_dx, sin(d_alpha), cos(d_alpha), d_dy, 0, 0, 1;
     Eigen::Matrix<double, 3, 1> coordinate_before;
     coordinate_before << d_x, d_y, 1.0;
     Eigen::Matrix<double, 3, 1> coordinate_after;
@@ -202,7 +202,7 @@ Eigen::VectorXd C_MPC_ROAD::calculate_coordinateConversionToWorld(double d_x, do
 Eigen::VectorXd C_MPC_ROAD::calculate_coordinateConversionFromWorld(double d_x, double d_y, double d_alpha, double d_dx, double d_dy)
 {
     Eigen::Matrix<double, 3, 3> _m_T_inverse;
-    _m_T_inverse << cos(d_alpha), sin(d_alpha), - d_dx * cos(d_alpha) - d_dy * sin(d_alpha), - sin(d_alpha), cos(d_alpha), d_dx * sin(d_alpha) - d_dy * cos(d_alpha), 0, 0, 1;
+    _m_T_inverse << cos(d_alpha), sin(d_alpha), -d_dx * cos(d_alpha) - d_dy * sin(d_alpha), -sin(d_alpha), cos(d_alpha), d_dx * sin(d_alpha) - d_dy * cos(d_alpha), 0, 0, 1;
     Eigen::Matrix<double, 3, 1> coordinate_before;
     coordinate_before << d_x, d_y, 1.0;
     Eigen::Matrix<double, 3, 1> coordinate_after;
@@ -216,7 +216,6 @@ Eigen::VectorXd C_MPC_ROAD::calculate_coordinateConversionFromWorld(double d_x, 
 Eigen::MatrixXd C_MPC_ROAD::calculate_Q(int i_Np, double d_q)
 {
     Eigen::MatrixXd m_Q = Eigen::MatrixXd::Zero(2 * i_Np, 2 * i_Np);
-//    m_Q.diagonal() = Eigen::VectorXd::Constant(5 * i_Np, d_q);
     for (int i = 0; i < 2 * i_Np; i++)
     {
         if (i % 2 == 0)
@@ -234,7 +233,6 @@ Eigen::MatrixXd C_MPC_ROAD::calculate_Q(int i_Np, double d_q)
 Eigen::MatrixXd C_MPC_ROAD::calculate_R(int i_Nc, double d_r)
 {
     Eigen::MatrixXd m_R = Eigen::MatrixXd::Zero(i_Nc, i_Nc);
-    //    m_R.diagonal() = Eigen::VectorXd::Constant(i_Nc, d_r);
     for (int i = 0; i < i_Nc; i++)
     {
         m_R(i, i) = d_r;
@@ -259,7 +257,7 @@ Eigen::Matrix<double, 2, 5> C_MPC_ROAD::calculate_C_XY()
 void C_MPC_ROAD::calculate_coordinateDirection()
 {
     double d_sum = 0.0;
-    for(int index = i_nearstIndex; index < pathsWithAngleRef.size() && index < i_nearstIndex + i_num; index++)
+    for (int index = i_nearstIndex; index < pathsWithAngleRef.size() && index < i_nearstIndex + i_num; index++)
     {
         d_sum += pathsWithAngleRef[index].theta;
     }
@@ -285,14 +283,16 @@ void C_MPC_ROAD::calculate_Q_R_C()
     optData.m_CExpanded = Eigen::MatrixXd(2 * optData.i_Np, 5 * optData.i_Np);
     optData.m_CExpanded.setZero();
     // 在对角线上放置m_C的副本
-    for (int i = 0; i < optData.i_Np; ++i) {
+    for (int i = 0; i < optData.i_Np; ++i)
+    {
         optData.m_CExpanded.block(i * 2, i * 5, 2, 5) = m_C;
     }
 
     optData.m_C_XYExpanded = Eigen::MatrixXd(2 * optData.i_Np, 5 * optData.i_Np);
     optData.m_C_XYExpanded.setZero();
     // 在对角线上放置m_C_XY的副本
-    for (int i = 0; i < optData.i_Np; ++i) {
+    for (int i = 0; i < optData.i_Np; ++i)
+    {
         optData.m_C_XYExpanded.block(i * 2, i * 5, 2, 5) = m_C_XY;
     }
 }
@@ -311,7 +311,7 @@ void C_MPC_ROAD::calculate_etaRef()
 {
     optData.v_etaRef = 0.0 * Eigen::VectorXd::Ones(2 * optData.i_Np);
     Eigen::VectorXd temp;
-    for(int index = 0; index < optData.i_Np; index++)
+    for (int index = 0; index < optData.i_Np; index++)
     {
         temp = calculate_coordinateConversionFromWorld(pathsWithAngleRef[i_nearstIndex + index].x, pathsWithAngleRef[i_nearstIndex + index].y, d_thetaAvg, poseNow.d_x0, poseNow.d_y0);
         optData.v_etaRef(2 * index + 1) = temp(1);
@@ -321,7 +321,7 @@ void C_MPC_ROAD::calculate_etaRef()
 
 void C_MPC_ROAD::calculate_sideOb()
 {
-    for(int index = 0; index < optData.i_N; index++)
+    for (int index = 0; index < optData.i_N; index++)
     {
         Eigen::VectorXd temp = calculate_coordinateConversionFromWorld(optData.v_sideOb(2 * index), optData.v_sideOb(2 * index + 1), d_thetaAvg, poseNow.d_x0, poseNow.d_y0);
         optData.v_sideOb(2 * index) = temp(0);
@@ -392,7 +392,7 @@ Eigen::VectorXd C_MPC_ROAD::calculate_xi(Eigen::VectorXd v_ay_Np, Eigen::VectorX
     double d_phidot = calculate_phidot(v_ay_Np, v_xi, 0);
     double d_Xdot = calculate_Xdot(v_xi, 0);
     double d_Ydot = calculate_Ydot(v_xi, 0);
-    for(int i = 1; i < i_Np; i++)
+    for (int i = 1; i < i_Np; i++)
     {
         v_xi(5 * i) = v_xi(5 * (i - 1)) + d_T * d_xdotdot;
         v_xi(5 * i + 1) = v_xi(5 * (i - 1) + 1) + d_T * d_ydotdot;
@@ -414,11 +414,11 @@ Eigen::VectorXd C_MPC_ROAD::calculate_xi(Eigen::VectorXd v_ay_Np, Eigen::VectorX
 Eigen::VectorXd C_MPC_ROAD::calculate_ay(Eigen::VectorXd v_ay_Nc, int i_Np, int i_Nc)
 {
     Eigen::VectorXd v_ay_Np = 0.0 * Eigen::VectorXd::Ones(i_Np); // 初始化ay
-    for(int i = 0; i < i_Nc; i++)
+    for (int i = 0; i < i_Nc; i++)
     {
         v_ay_Np(i) = v_ay_Nc(i);
     }
-    for(int i = i_Nc; i < i_Np; i++)
+    for (int i = i_Nc; i < i_Np; i++)
     {
         v_ay_Np(i) = v_ay_Nc(i_Nc - 1);
     }
@@ -454,9 +454,9 @@ Eigen::VectorXd C_MPC_ROAD::calculate_u(Eigen::VectorXd v_ay_Nc)
 double C_MPC_ROAD::calculate_Job(Eigen::VectorXd v_xi, int i_Np, int i_N, double d_Sob, double d_zeta, Eigen::VectorXd v_sideOb)
 {
     double d_Job = 0;
-    for(int j = 0; j < i_Np; j++)
+    for (int j = 0; j < i_Np; j++)
     {
-        for(int i = 0; i < i_N; i++)
+        for (int i = 0; i < i_N; i++)
         {
             d_Job += d_Sob * (v_xi(5 * j) * v_xi(5 * j) + v_xi(5 * j + 1) * v_xi(5 * j + 1)) /
                      ((v_sideOb(2 * i) - v_xi(5 * j + 3)) * (v_sideOb(2 * i) - v_xi(5 * j + 3)) + (v_sideOb(2 * i + 1) - v_xi(5 * j + 4)) * (v_sideOb(2 * i + 1) - v_xi(5 * j + 4)) + d_zeta);
@@ -477,7 +477,7 @@ double C_MPC_ROAD::utility(unsigned n, const double *x, double *grad, void *data
     double d_Job = calculate_Job(xi_eta.v_xi, optData->i_Np, optData->i_N, optData->d_Sob, optData->d_zeta, optData->v_sideOb);
 
     Eigen::VectorXd deltaEta = xi_eta.v_eta - optData->v_etaRef;
-    for(int index = 0; index < optData->i_Np; index++)
+    for (int index = 0; index < optData->i_Np; index++)
     {
         while (deltaEta[2 * index] > M_PI)
         {
@@ -493,20 +493,18 @@ double C_MPC_ROAD::utility(unsigned n, const double *x, double *grad, void *data
 
     double result = result1 + result2 + d_Job;
 
-//    std::cout << std::endl << "result:" << result << std::endl;
-
     return result;
 }
 
-Eigen::VectorXd C_MPC_ROAD::filterElements(const Eigen::VectorXd& original, int i_N)
+Eigen::VectorXd C_MPC_ROAD::filterElements(const Eigen::VectorXd &original, int i_N)
 {
     std::vector<double> temp;
     temp.reserve(original.size()); // 优化，预先分配足够的空间
 
-    for(int index = 0; index < i_N; ++index)
+    for (int index = 0; index < i_N; ++index)
     {
         // 检查条件是否满足
-        if(!(original(2 * index) < -0.5 || original(2 * index + 1) > 2.0 || original(2 * index + 1) < -2.0))
+        if (!(original(2 * index) < -0.5 || original(2 * index + 1) > 2.0 || original(2 * index + 1) < -2.0))
         {
             // 如果不需要删除，添加到临时vector中
             if (2 * index < original.size())
@@ -539,11 +537,6 @@ Eigen::VectorXd C_MPC_ROAD::get_road_best()
 
     optData.v_sideOb = filterElements(optData.v_sideOb, optData.i_N);
     optData.i_N = optData.v_sideOb.size() / 2;
-//    if(optData.i_N == 0)
-//    {
-//        Eigen::VectorXd emptyVector;
-//        return emptyVector;
-//    }
 
     double tol = 1e-8;
 
@@ -565,13 +558,13 @@ Eigen::VectorXd C_MPC_ROAD::get_road_best()
 
     nlopt::result result = opter.optimize(vd_x, f_min);
 
-    if(result)
+    if (result)
     {
         Eigen::VectorXd v_ay_Nc = Eigen::VectorXd::Map(vd_x.data(), vd_x.size());
         Eigen::VectorXd v_ay_Np = calculate_ay(v_ay_Nc, optData.i_Np, optData.i_Nc);
         Eigen::VectorXd v_xi = calculate_xi(v_ay_Np, optData.v_xi0, optData.d_T, optData.i_Np);
         Eigen::VectorXd v_XY = optData.m_C_XYExpanded * v_xi;
-        for(int index = 0; index < optData.i_Np; index++) // 需要修改
+        for (int index = 0; index < optData.i_Np; index++) // 需要修改
         {
             Eigen::VectorXd temp = calculate_coordinateConversionToWorld(v_XY(2 * index), v_XY(2 * index + 1), d_thetaAvg, poseNow.d_x0, poseNow.d_y0);
             v_XY(2 * index) = temp(0);

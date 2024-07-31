@@ -4,7 +4,8 @@
 #include <boost/filesystem.hpp>
 #include "parameter_reader.h"
 
-struct NavControlParams {
+struct NavControlParams
+{
     int n;
     int m;
     int Nc;
@@ -20,7 +21,8 @@ struct NavControlParams {
     double deltaDeltaMax;
 };
 
-struct NavRoadParams {
+struct NavRoadParams
+{
     double q;
     double r;
     double aymin;
@@ -33,7 +35,7 @@ struct NavRoadParams {
     int num;
 };
 
-static NavControlParams CreateControlTaskDecOptions(const std::string& file_name)
+static NavControlParams CreateControlTaskDecOptions(const std::string &file_name)
 {
     std::string task_option_name = file_name + "/task_control_params.txt";
     std::cout << "read task_control_params   " << task_option_name << std::endl;
@@ -50,12 +52,12 @@ static NavControlParams CreateControlTaskDecOptions(const std::string& file_name
     paramReader.param("epsilonRelaxationFactor", navControlParams.epsilonRelaxationFactor, 1.0);
     paramReader.param("rhoWeightCoefficient", navControlParams.rhoWeightCoefficient, 100.0);
     paramReader.param("vMax", navControlParams.vMax, 1.0);
-    paramReader.param("deltaMax", navControlParams.deltaMax, 0.4712);//0.0873,0.4712,0.6109
+    paramReader.param("deltaMax", navControlParams.deltaMax, 0.4712); // 0.0873,0.4712,0.6109
     paramReader.param("deltaDeltaMax", navControlParams.deltaDeltaMax, 1.5);
     return navControlParams;
 }
 
-static NavRoadParams CreateRoadTaskDecOptions(const std::string& file_name)
+static NavRoadParams CreateRoadTaskDecOptions(const std::string &file_name)
 {
     std::string task_option_name = file_name + "/task_road_params.txt";
     std::cout << "read task_road_params   " << task_option_name << std::endl;

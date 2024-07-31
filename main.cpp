@@ -1,4 +1,4 @@
-//#include <Windows.h>
+// #include <Windows.h>
 #include "nav_control.h"
 #include "math_formula.hpp"
 #include "bezier_smoothing/bezier_smoothing.h"
@@ -23,7 +23,7 @@ std::vector<robos::Point2d> pathsRef;
 std::vector<robos::Point2d> pathsRefLeft;
 std::vector<robos::Point2d> pathsRefRight;
 Eigen::VectorXd sideOb;
-//定义机器人状态量并初始化
+// 定义机器人状态量并初始化
 robos::Pose2D curpose = robos::Pose2D(0.0, 0.0, 1.57);
 robos::Pose2D curposeLeft = robos::Pose2D(-1.0, -1.0, 1.57);
 robos::Pose2D curposeRight = robos::Pose2D(1.0, -1.0, 1.57);
@@ -37,8 +37,8 @@ bool no_main = false;
 
 // 共享数据和互斥锁
 std::mutex pathsMutex;
-std::vector<robos::Point2d> pathsTemp; // 共享变量，存储避障线程计算的结果
-std::vector<robos::Point2d> pathsTempLeft; // 共享变量，存储避障线程计算的结果
+std::vector<robos::Point2d> pathsTemp;      // 共享变量，存储避障线程计算的结果
+std::vector<robos::Point2d> pathsTempLeft;  // 共享变量，存储避障线程计算的结果
 std::vector<robos::Point2d> pathsTempRight; // 共享变量，存储避障线程计算的结果
 std::condition_variable pathsCondition;
 bool readyForNewPath = false; // 控制是否准备好计算新路径
@@ -46,7 +46,7 @@ bool readyForNewPath = false; // 控制是否准备好计算新路径
 Eigen::VectorXd calculate_coordinateConversionFromWorld(double d_x, double d_y, double d_alpha, double d_dx, double d_dy)
 {
     Eigen::Matrix<double, 3, 3> _m_T_inverse;
-    _m_T_inverse << cos(d_alpha), sin(d_alpha), - d_dx * cos(d_alpha) - d_dy * sin(d_alpha), - sin(d_alpha), cos(d_alpha), d_dx * sin(d_alpha) - d_dy * cos(d_alpha), 0, 0, 1;
+    _m_T_inverse << cos(d_alpha), sin(d_alpha), -d_dx * cos(d_alpha) - d_dy * sin(d_alpha), -sin(d_alpha), cos(d_alpha), d_dx * sin(d_alpha) - d_dy * cos(d_alpha), 0, 0, 1;
     Eigen::Matrix<double, 3, 1> coordinate_before;
     coordinate_before << d_x, d_y, 1.0;
     Eigen::Matrix<double, 3, 1> coordinate_after;
@@ -57,7 +57,7 @@ Eigen::VectorXd calculate_coordinateConversionFromWorld(double d_x, double d_y, 
     return result;
 }
 
-robos::Pose2D updatePose(const robos::Pose2D& curpose, const navigation::CtrlOutput& ctroutput)
+robos::Pose2D updatePose(const robos::Pose2D &curpose, const navigation::CtrlOutput &ctroutput)
 {
     double Vx = ctroutput.lineV * cos(ctroutput.angle);
     double Vy = ctroutput.lineV * sin(ctroutput.angle);
@@ -75,8 +75,6 @@ robos::Pose2D updatePose(const robos::Pose2D& curpose, const navigation::CtrlOut
     {
         dx = fabs(Vx) * dt;
         dy = fabs(Vy) * dt;
-        // dx = fabs(ctroutput.lineV) * dt;
-        // dy = 0;
     }
     robos::Pose2D result;
     result.x = cos(car_angle) * dx - sin(car_angle) * dy + curpose.x;
@@ -85,9 +83,9 @@ robos::Pose2D updatePose(const robos::Pose2D& curpose, const navigation::CtrlOut
     return result;
 }
 
-//路径分割  按地图分辨率进行分割
-std::vector<robos::Point2d> segLinePath(const robos::Point2d& start_point,
-    const robos::Point2d& end_point,    const double& map_resolution)
+// 路径分割  按地图分辨率进行分割
+std::vector<robos::Point2d> segLinePath(const robos::Point2d &start_point,
+                                        const robos::Point2d &end_point, const double &map_resolution)
 {
     std::vector<robos::Point2d> point_list;
     double angle = Get2PointSlop(start_point, end_point);
@@ -109,7 +107,7 @@ std::vector<robos::Point2d> segLinePath(const robos::Point2d& start_point,
     return point_list;
 }
 
-std::vector<robos::Point2d> segLinePathAll(const std::vector<robos::Point2d> pathRaw, const double& map_resolution)
+std::vector<robos::Point2d> segLinePathAll(const std::vector<robos::Point2d> pathRaw, const double &map_resolution)
 {
     std::vector<robos::Point2d> segmentedPath;
     for (size_t i = 0; i < pathRaw.size() - 1; ++i)
@@ -127,8 +125,8 @@ std::vector<robos::Point2d> segLinePathAll(const std::vector<robos::Point2d> pat
     return segmentedPath;
 }
 
-std::vector<robos::Point2d> quarterEllipsePath(const robos::Point2d& start_point,
-                                               const robos::Point2d& end_point,
+std::vector<robos::Point2d> quarterEllipsePath(const robos::Point2d &start_point,
+                                               const robos::Point2d &end_point,
                                                const double map_resolution,
                                                const bool center_above)
 {
@@ -261,8 +259,8 @@ std::vector<robos::Point2d> quarterEllipsePath(const robos::Point2d& start_point
     return point_list;
 }
 
-std::vector<robos::Point2d> arcPath(const robos::Point2d& start_point,
-                                    const robos::Point2d& end_point,
+std::vector<robos::Point2d> arcPath(const robos::Point2d &start_point,
+                                    const robos::Point2d &end_point,
                                     const double map_resolution,
                                     const double arc_angle,
                                     const bool center_above)
@@ -297,30 +295,14 @@ std::vector<robos::Point2d> arcPath(const robos::Point2d& start_point,
     double start_angle = atan2(start_point.y - center_point.y, start_point.x - center_point.x);
     double end_angle = atan2(end_point.y - center_point.y, end_point.x - center_point.x);
 
-//    // 确保圆弧方向正确
-//    if (center_above)
-//    {
-//        if (start_angle < end_angle)
-//        {
-//            start_angle += 2 * M_PI;
-//        }
-//    }
-//    else
-//    {
-//        if (start_angle > end_angle)
-//        {
-//            end_angle += 2 * M_PI;
-//        }
-//    }
-
     // 步长和步数
     double angular_step = map_resolution / radius;
     int steps = static_cast<int>(arc_angle / angular_step);
 
     // 生成圆弧点
-    if(cos(start_angle) < cos(end_angle))
+    if (cos(start_angle) < cos(end_angle))
     {
-        if(center_above)
+        if (center_above)
         {
             for (int i = 0; i <= steps; ++i)
             {
@@ -345,7 +327,7 @@ std::vector<robos::Point2d> arcPath(const robos::Point2d& start_point,
     }
     else
     {
-        if(center_above)
+        if (center_above)
         {
             for (int i = 0; i <= steps; ++i)
             {
@@ -391,60 +373,62 @@ void computePaths()
             }
         }
         std::vector<robos::Point2d> rawPaths = navRoad.getRoad(sideOb, curpose, v);
-        if(rawPaths.size() == 0)
+        if (rawPaths.size() == 0)
         {
             rawPaths = pathsRef;
         }
-        std::cout << std::endl << "getRoad " << rawPaths.size() << std::endl;
-//        std::vector<robos::Point2d> newPaths = segLinePathAll(rawPaths, 0.05);
+        std::cout << std::endl
+                  << "getRoad " << rawPaths.size() << std::endl;
+        //        std::vector<robos::Point2d> newPaths = segLinePathAll(rawPaths, 0.05);
         {
             std::lock_guard<std::mutex> lock(pathsMutex);
-            pathsTemp = rawPaths; // 更新paths
+            pathsTemp = rawPaths;    // 更新paths
             readyForNewPath = false; // 重置标志
         }
         // 线程休眠0.2秒，放在这里确保至少等待这段时间后再计算新路径
-//        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        //        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }
 
-//void runPaths()
-//{
-//    while (true)
-//    {
-//        std::vector<robos::Point2d> currentPaths;
-//        {
-//            std::lock_guard<std::mutex> lock(pathsMutex);
-//            currentPaths = pathsTemp; // 获取最新的paths
-//        }
+void runPaths()
+{
+    while (true)
+    {
+        std::vector<robos::Point2d> currentPaths;
+        {
+            std::lock_guard<std::mutex> lock(pathsMutex);
+            currentPaths = pathsTemp; // 获取最新的paths
+        }
 
-//        navControl.setPath(currentPaths);
-//        bool result = navControl.getCtrlResult(curpose, ctr_output);
-//        if(result)
-//        {
-//            curpose = updatePose(curpose, ctr_output);
-//            {
-//                std::lock_guard<std::mutex> lock(pathsMutex);
-//                readyForNewPath = true; // 设置标志，让computePaths可以计算新路径
-//            }
-//            pathsCondition.notify_all(); // 通知computePaths
-//        }
-//        else
-//        {
-//            break; // 或者处理错误
-//        }
-//        // 线程休眠0.05秒，放在这里确保至少等待这段时间后再计算新路径
-//        std::this_thread::sleep_for(std::chrono::milliseconds(50));
-//    }
-//}
+        navControl.setPath(currentPaths);
+        bool result = navControl.getCtrlResult(curpose, ctr_output);
+        if (result)
+        {
+            curpose = updatePose(curpose, ctr_output);
+            {
+                std::lock_guard<std::mutex> lock(pathsMutex);
+                readyForNewPath = true; // 设置标志，让computePaths可以计算新路径
+            }
+            pathsCondition.notify_all(); // 通知computePaths
+        }
+        else
+        {
+            break; // 或者处理错误
+        }
+        // 线程休眠0.05秒，放在这里确保至少等待这段时间后再计算新路径
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    }
+}
 
 void computePathsTest(NavRoad &_navRoad, robos::Pose2D _curpose, std::vector<robos::Point2d> _pathsRef, std::vector<robos::Point2d> &_pathsTemp)
 {
     std::vector<robos::Point2d> rawPaths = _navRoad.getRoad(sideOb, _curpose, v);
-    if(rawPaths.size() == 0)
+    if (rawPaths.size() == 0)
     {
         rawPaths = _pathsRef;
     }
-    std::cout << std::endl << "getRoad " << rawPaths.size() << std::endl;
+    std::cout << std::endl
+              << "getRoad " << rawPaths.size() << std::endl;
     _pathsTemp = rawPaths; // 更新paths
 }
 
@@ -454,7 +438,7 @@ bool runPathsTest(NavControl &_navControl, robos::Pose2D &_curpose, navigation::
     currentPaths = _pathsTemp; // 获取最新的paths
     _navControl.setPath(currentPaths);
     bool result = _navControl.getCtrlResult(_curpose, _ctr_output, _ismain);
-    if(result)
+    if (result)
     {
         _curpose = updatePose(_curpose, _ctr_output);
         return true;
@@ -465,24 +449,24 @@ bool runPathsTest(NavControl &_navControl, robos::Pose2D &_curpose, navigation::
     }
 }
 
-void getPathsRef(std::vector<robos::Point2d>& pathsRef, std::vector<robos::Point2d> path_points)
+void getPathsRef(std::vector<robos::Point2d> &pathsRef, std::vector<robos::Point2d> path_points)
 {
     std::vector<robos::Point2d> temp_path;
 
-//    temp_path = segLinePath(path_points[0], path_points[1], 0.05);
-//    pathsRef.insert(pathsRef.end(), temp_path.cbegin(), temp_path.cend());
+    //    temp_path = segLinePath(path_points[0], path_points[1], 0.05);
+    //    pathsRef.insert(pathsRef.end(), temp_path.cbegin(), temp_path.cend());
 
-//    temp_path = arcPath(path_points[1], path_points[2], 0.05, 1.57, CENTER_BELOW);
-//    pathsRef.insert(pathsRef.end(), temp_path.cbegin(), temp_path.cend());
+    //    temp_path = arcPath(path_points[1], path_points[2], 0.05, 1.57, CENTER_BELOW);
+    //    pathsRef.insert(pathsRef.end(), temp_path.cbegin(), temp_path.cend());
 
-//    temp_path = segLinePath(path_points[2], path_points[3], 0.05);
-//    pathsRef.insert(pathsRef.end(), temp_path.cbegin(), temp_path.cend());
+    //    temp_path = segLinePath(path_points[2], path_points[3], 0.05);
+    //    pathsRef.insert(pathsRef.end(), temp_path.cbegin(), temp_path.cend());
 
-//    temp_path = arcPath(path_points[3], path_points[4], 0.05, 1.57, CENTER_BELOW);
-//    pathsRef.insert(pathsRef.end(), temp_path.cbegin(), temp_path.cend());
+    //    temp_path = arcPath(path_points[3], path_points[4], 0.05, 1.57, CENTER_BELOW);
+    //    pathsRef.insert(pathsRef.end(), temp_path.cbegin(), temp_path.cend());
 
-//    temp_path = segLinePath(path_points[4], path_points[5], 0.05);
-//    pathsRef.insert(pathsRef.end(), temp_path.cbegin(), temp_path.cend());
+    //    temp_path = segLinePath(path_points[4], path_points[5], 0.05);
+    //    pathsRef.insert(pathsRef.end(), temp_path.cbegin(), temp_path.cend());
 
     temp_path = arcPath(path_points[0], path_points[1], 0.05, 1.57, CENTER_BELOW);
     pathsRef.insert(pathsRef.end(), temp_path.cbegin(), temp_path.cend());
@@ -494,7 +478,7 @@ void getPathsRef(std::vector<robos::Point2d>& pathsRef, std::vector<robos::Point
     pathsRef.insert(pathsRef.end(), temp_path.cbegin(), temp_path.cend());
 }
 
-void getPathsRightLeftRef(std::vector<robos::Point2d>& pathsRef, std::vector<robos::Point2d> path_points)
+void getPathsRightLeftRef(std::vector<robos::Point2d> &pathsRef, std::vector<robos::Point2d> path_points)
 {
     std::vector<robos::Point2d> temp_path;
 
@@ -523,7 +507,7 @@ void getPathsRightLeftRef(std::vector<robos::Point2d>& pathsRef, std::vector<rob
     pathsRef.insert(pathsRef.end(), temp_path.cbegin(), temp_path.cend());
 }
 
-void getPathPoints(const double scale, std::vector<robos::Point2d>& path_points, std::vector<robos::Point2d>& path_pointsLeft, std::vector<robos::Point2d>& path_pointsRight)
+void getPathPoints(const double scale, std::vector<robos::Point2d> &path_points, std::vector<robos::Point2d> &path_pointsLeft, std::vector<robos::Point2d> &path_pointsRight)
 {
     path_points.push_back(robos::Point2d(0, 0));
     path_points.push_back(robos::Point2d(10 * scale, 10 * scale));
@@ -540,29 +524,29 @@ void getPathPoints(const double scale, std::vector<robos::Point2d>& path_points,
     path_pointsRight.push_back(robos::Point2d(21 * scale, 19 * scale));
     path_pointsRight.push_back(robos::Point2d(21 * scale, 20 * scale));
 
-//    path_points.push_back(robos::Point2d(0, 0));
-//    path_points.push_back(robos::Point2d(0, 5 * scale));
-//    path_points.push_back(robos::Point2d(5 * scale, 10 * scale));
-//    path_points.push_back(robos::Point2d(10 * scale, 10 * scale));
-//    path_points.push_back(robos::Point2d(15 * scale, 5 * scale));
-//    path_points.push_back(robos::Point2d(15 * scale, 0));
+    //    path_points.push_back(robos::Point2d(0, 0));
+    //    path_points.push_back(robos::Point2d(0, 5 * scale));
+    //    path_points.push_back(robos::Point2d(5 * scale, 10 * scale));
+    //    path_points.push_back(robos::Point2d(10 * scale, 10 * scale));
+    //    path_points.push_back(robos::Point2d(15 * scale, 5 * scale));
+    //    path_points.push_back(robos::Point2d(15 * scale, 0));
 
-//    path_pointsLeft.push_back(robos::Point2d(-1 * scale, -1 * scale));
-//    path_pointsLeft.push_back(robos::Point2d(-1 * scale, 5 * scale));
-//    path_pointsLeft.push_back(robos::Point2d(5 * scale, 11 * scale));
-//    path_pointsLeft.push_back(robos::Point2d(10 * scale, 11 * scale));
-//    path_pointsLeft.push_back(robos::Point2d(16 * scale, 5 * scale));
-//    path_pointsLeft.push_back(robos::Point2d(16 * scale, 1 * scale));
+    //    path_pointsLeft.push_back(robos::Point2d(-1 * scale, -1 * scale));
+    //    path_pointsLeft.push_back(robos::Point2d(-1 * scale, 5 * scale));
+    //    path_pointsLeft.push_back(robos::Point2d(5 * scale, 11 * scale));
+    //    path_pointsLeft.push_back(robos::Point2d(10 * scale, 11 * scale));
+    //    path_pointsLeft.push_back(robos::Point2d(16 * scale, 5 * scale));
+    //    path_pointsLeft.push_back(robos::Point2d(16 * scale, 1 * scale));
 
-//    path_pointsRight.push_back(robos::Point2d(1 * scale, -1 * scale));
-//    path_pointsRight.push_back(robos::Point2d(1 * scale, 5 * scale));
-//    path_pointsRight.push_back(robos::Point2d(5 * scale, 9 * scale));
-//    path_pointsRight.push_back(robos::Point2d(10 * scale, 9 * scale));
-//    path_pointsRight.push_back(robos::Point2d(14 * scale, 5 * scale));
-//    path_pointsRight.push_back(robos::Point2d(14 * scale, 1 * scale));
+    //    path_pointsRight.push_back(robos::Point2d(1 * scale, -1 * scale));
+    //    path_pointsRight.push_back(robos::Point2d(1 * scale, 5 * scale));
+    //    path_pointsRight.push_back(robos::Point2d(5 * scale, 9 * scale));
+    //    path_pointsRight.push_back(robos::Point2d(10 * scale, 9 * scale));
+    //    path_pointsRight.push_back(robos::Point2d(14 * scale, 5 * scale));
+    //    path_pointsRight.push_back(robos::Point2d(14 * scale, 1 * scale));
 }
 
-void init_ctr_output(navigation::CtrlOutput& ctr_output)
+void init_ctr_output(navigation::CtrlOutput &ctr_output)
 {
     ctr_output.angle = 0.0;
     ctr_output.angularV = 0.0;
@@ -571,7 +555,7 @@ void init_ctr_output(navigation::CtrlOutput& ctr_output)
     ctr_output.reduce_model = 0;
 }
 
-void runAllSameTime(double scale, NavControl& navControl, NavControl& navControlLeft, NavControl& navControlRight, std::vector<std::vector<robos::Point2d>> pathAll, bool result, std::vector<robos::Pose2D> curposeAll, std::vector<navigation::CtrlOutput> ctr_outputAll)
+void runAllSameTime(double scale, NavControl &navControl, NavControl &navControlLeft, NavControl &navControlRight, std::vector<std::vector<robos::Point2d>> pathAll, bool result, std::vector<robos::Pose2D> curposeAll, std::vector<navigation::CtrlOutput> ctr_outputAll)
 {
     while (1)
     {
@@ -588,13 +572,7 @@ void runAllSameTime(double scale, NavControl& navControl, NavControl& navControl
         double d1 = coordinateLeft(0) + 1.0;
         Eigen::VectorXd coordinateRight = calculate_coordinateConversionFromWorld(curposeAll[2].x, curposeAll[2].y, curposeAll[0].theta, curposeAll[0].x, curposeAll[0].y);
         double d2 = coordinateRight(0) + 1.0;
-//        d1 = (d1 > 1.0) ? 1.0 : d1;
-//        d1 = (d1 < - 1.0) ? - 1.0 : d1; // 应该加速
-//        d2 = (d2 > 1.0) ? 1.0 : d2;
-//        d2 = (d2 < - 1.0) ? - 1.0 : d2;
-//        ctr_outputAll[1].lineV *= (1 - scaleV * d1);
-//        ctr_outputAll[2].lineV *= (1 - scaleV * d2);
-        if(result)
+        if (result)
         {
             curposeAll[0] = updatePose(curposeAll[0], ctr_outputAll[0]);
             curposeAll[1] = updatePose(curposeAll[1], ctr_outputAll[1]);
@@ -607,14 +585,14 @@ void runAllSameTime(double scale, NavControl& navControl, NavControl& navControl
     }
 }
 
-void runOne(int i, NavControl& navControl, std::vector<std::vector<robos::Point2d>> pathAll, bool result, std::vector<robos::Pose2D> curposeAll, std::vector<navigation::CtrlOutput> ctr_outputAll)
+void runOne(int i, NavControl &navControl, std::vector<std::vector<robos::Point2d>> pathAll, bool result, std::vector<robos::Pose2D> curposeAll, std::vector<navigation::CtrlOutput> ctr_outputAll)
 {
     while (1)
     {
         navControl.setPath(pathAll[i]);
         result = 1;
         result *= navControl.getCtrlResult(curposeAll[i], ctr_outputAll[i], is_main);
-        if(result)
+        if (result)
         {
             curposeAll[i] = updatePose(curposeAll[i], ctr_outputAll[i]);
         }
@@ -625,31 +603,31 @@ void runOne(int i, NavControl& navControl, std::vector<std::vector<robos::Point2
     }
 }
 
-void runAllNoSameTime(int zero, int one, int two, NavControl& navControl, NavControl& navControlLeft, NavControl& navControlRight, std::vector<std::vector<robos::Point2d>> pathAll, bool result, std::vector<robos::Pose2D> curposeAll, std::vector<navigation::CtrlOutput> ctr_outputAll)
+void runAllNoSameTime(int zero, int one, int two, NavControl &navControl, NavControl &navControlLeft, NavControl &navControlRight, std::vector<std::vector<robos::Point2d>> pathAll, bool result, std::vector<robos::Pose2D> curposeAll, std::vector<navigation::CtrlOutput> ctr_outputAll)
 {
     runOne(zero, navControl, pathAll, result, curposeAll, ctr_outputAll);
-//    runOne(one, navControlLeft, pathAll, result, curposeAll, ctr_outputAll);
-//    runOne(two, navControlRight, pathAll, result, curposeAll, ctr_outputAll);
+    //    runOne(one, navControlLeft, pathAll, result, curposeAll, ctr_outputAll);
+    //    runOne(two, navControlRight, pathAll, result, curposeAll, ctr_outputAll);
 }
 
 void runOneWithObstacles(double _threshold, NavRoad &_navRoad, std::vector<robos::Point2d> &_pathsTemp, bool &_control, robos::Pose2D &_curpose, std::vector<robos::Point2d> &_pathsRef, NavControl &_navControl, navigation::CtrlOutput &_ctr_output, bool _ismain)
 {
-    while(1)
+    while (1)
     {
         computePathsTest(_navRoad, _curpose, _pathsRef, _pathsTemp);
-        for(int i = 0; i < 5; i++)
+        for (int i = 0; i < 5; i++)
         {
             _control = runPathsTest(_navControl, _curpose, _ctr_output, _ismain, _pathsTemp);
-            if(!_control)
+            if (!_control)
             {
                 break;
             }
         }
-        if(!_control)
+        if (!_control)
         {
             break;
         }
-        if(_curpose.y > _threshold)
+        if (_curpose.y > _threshold)
         {
             break;
         }
@@ -660,26 +638,26 @@ void runOneWithObstacles(double _threshold, NavRoad &_navRoad, std::vector<robos
 
 int main()
 {
-//    BezierSmoothing bezirSmoothing;
+    //    BezierSmoothing bezirSmoothing;
 
-    //机器人跟踪的路径点
+    // 机器人跟踪的路径点
     std::vector<robos::Point2d> path_points;
     std::vector<robos::Point2d> path_pointsLeft;
     std::vector<robos::Point2d> path_pointsRight;
 
-//    double scale = 0.5;
+    //    double scale = 0.5;
     double scale = 1.0;
-//    double scale = 2.0;
+    //    double scale = 2.0;
 
     getPathPoints(scale, path_points, path_pointsLeft, path_pointsRight);
 
-    //对路径点进行分割
-//    for (size_t i = 0; i < path_points.size() - 1; i++)
-//    {
-//        std::vector<robos::Point2d> temp_path
-//            = segLinePath(path_points[i], path_points[i + 1], 0.05);
-//        paths.insert(paths.end(), temp_path.cbegin(), temp_path.cend());
-//    }
+    // 对路径点进行分割
+    //    for (size_t i = 0; i < path_points.size() - 1; i++)
+    //    {
+    //        std::vector<robos::Point2d> temp_path
+    //            = segLinePath(path_points[i], path_points[i + 1], 0.05);
+    //        paths.insert(paths.end(), temp_path.cbegin(), temp_path.cend());
+    //    }
 
     getPathsRef(pathsRef, path_points);
     if (!pathsRef.empty())
@@ -695,9 +673,9 @@ int main()
     pathAll.push_back(pathsRefLeft);
     pathAll.push_back(pathsRefRight);
 
-    //对路径点进行平滑
-//    paths = bezirSmoothing.getGlobalBezier(paths);
-    //获得角度
+    // 对路径点进行平滑
+    //    paths = bezirSmoothing.getGlobalBezier(paths);
+    // 获得角度
     navRoad.setPath(pathAll[0]);
     navRoadLeft.setPath(pathAll[1]);
     navRoadRight.setPath(pathAll[2]);
@@ -705,7 +683,7 @@ int main()
     // 障碍物
     sideOb.resize(4);
     sideOb << 0.0, 2.0, 10.0, 10.0;
-//    sideOb.resize(0);
+    //    sideOb.resize(0);
 
     robos::Pose2D curposeTest = robos::Pose2D(0.000354136, 0.495, 1.57);
     std::vector<robos::Pose2D> curposeAll;
@@ -713,22 +691,7 @@ int main()
     curposeAll.push_back(curposeLeft);
     curposeAll.push_back(curposeRight);
 
-//    // 记录开始时间
-//    auto start = std::chrono::high_resolution_clock::now();
-
-//    std::vector<robos::Point2d> test1 = navRoad.getRoad(sideOb, curposeTest, v);
-//    if(test1.size() == 0)
-//    {
-//        test1 = pathsRef;
-//    }
-
-//    // 记录结束时间
-//    auto end = std::chrono::high_resolution_clock::now();
-
-//    // 计算时间差，转换为秒，并转换为double类型
-//    double duration = std::chrono::duration<double, std::milli>(end - start).count();
-
-    //定义机器人当前控制量并初始化
+    // 定义机器人当前控制量并初始化
     init_ctr_output(ctr_output);
     init_ctr_output(ctr_outputLeft);
     init_ctr_output(ctr_outputRight);
@@ -738,23 +701,23 @@ int main()
     ctr_outputAll.push_back(ctr_outputLeft);
     ctr_outputAll.push_back(ctr_outputRight);
 
-    //获得控制量是否成功
+    // 获得控制量是否成功
     bool control = true;
 
     initializePathsTemp(); // 确保pathsTemp在多线程启动前被初始化
 
-//    std::thread roadThread(computePaths);
-//    std::thread controlThread(runPaths);
-//    roadThread.join();
-//    controlThread.join();
+    //    std::thread roadThread(computePaths);
+    //    std::thread controlThread(runPaths);
+    //    roadThread.join();
+    //    controlThread.join();
 
-//    runAllSameTime(scale, navControl, navControlLeft, navControlRight, pathAll, result, curposeAll, ctr_outputAll);
+    //    runAllSameTime(scale, navControl, navControlLeft, navControlRight, pathAll, result, curposeAll, ctr_outputAll);
 
     int zero = 0;
     int one = 1;
     int two = 2;
 
-//    runAllNoSameTime(zero, one, two, navControl, navControlLeft, navControlRight, pathAll, result, curposeAll, ctr_outputAll);
+    //    runAllNoSameTime(zero, one, two, navControl, navControlLeft, navControlRight, pathAll, result, curposeAll, ctr_outputAll);
 
     double threshold = 21.0;
 
@@ -765,4 +728,3 @@ int main()
     system("pause");
     return 0;
 }
-

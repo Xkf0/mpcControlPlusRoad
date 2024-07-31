@@ -36,12 +36,12 @@ private:
 public:
     C_min_j(int _m, int _Nc, double _epsilon, Eigen::VectorXd &_deltaUt)
         : m(_m),
-        Nc(_Nc),
-        epsilon(_epsilon)
+          Nc(_Nc),
+          epsilon(_epsilon)
     {
         std_lb.resize(m * Nc + 1);
         std::copy(deltaUmin.data(), deltaUmin.data() + m * Nc, std_lb.begin());
-        std_lb[m * Nc] = - INF;
+        std_lb[m * Nc] = -INF;
 
         std_ub.resize(m * Nc + 1);
         std::copy(deltaUmax.data(), deltaUmax.data() + m * Nc, std_ub.begin());
@@ -56,19 +56,19 @@ public:
     }
     C_min_j(int _m, int _Nc, double _epsilon, Eigen::MatrixXd &_H, Eigen::VectorXd &_f, Eigen::VectorXd &_deltaUmin, Eigen::VectorXd &_deltaUmax, Eigen::VectorXd &_Umin, Eigen::VectorXd &_Umax, Eigen::VectorXd &_Ut, Eigen::VectorXd &_deltaUt)
         : m(_m),
-        Nc(_Nc),
-        epsilon(_epsilon),
-        H(_H),
-        f(_f),
-        deltaUmin(_deltaUmin),
-        deltaUmax(_deltaUmax),
-        Umax(_Umax),
-        Umin(_Umin),
-        Ut(_Ut)
+          Nc(_Nc),
+          epsilon(_epsilon),
+          H(_H),
+          f(_f),
+          deltaUmin(_deltaUmin),
+          deltaUmax(_deltaUmax),
+          Umax(_Umax),
+          Umin(_Umin),
+          Ut(_Ut)
     {
         std_lb.resize(m * Nc + 1);
         std::copy(deltaUmin.data(), deltaUmin.data() + m * Nc, std_lb.begin());
-        std_lb[m * Nc] = - INF;
+        std_lb[m * Nc] = -INF;
 
         std_ub.resize(m * Nc + 1);
         std::copy(deltaUmax.data(), deltaUmax.data() + m * Nc, std_ub.begin());
@@ -82,33 +82,33 @@ public:
         }
     }
 
-    static C_min_j& GetOnlyCminj(int _m, int _Nc, double _epsilon, Eigen::MatrixXd &_H, Eigen::VectorXd &_f, Eigen::VectorXd &_deltaUmin, Eigen::VectorXd &_deltaUmax, Eigen::VectorXd &_Umin, Eigen::VectorXd &_Umax, Eigen::VectorXd &_Ut, Eigen::VectorXd &_deltaUt)
+    static C_min_j &GetOnlyCminj(int _m, int _Nc, double _epsilon, Eigen::MatrixXd &_H, Eigen::VectorXd &_f, Eigen::VectorXd &_deltaUmin, Eigen::VectorXd &_deltaUmax, Eigen::VectorXd &_Umin, Eigen::VectorXd &_Umax, Eigen::VectorXd &_Ut, Eigen::VectorXd &_deltaUt)
     {
         static C_min_j onlyInstance(_m, _Nc, _epsilon, _H, _f, _deltaUmin, _deltaUmax, _Umin, _Umax, _Ut, _deltaUt);
         return onlyInstance;
     }
 
-    C_min_j(const C_min_j& other)
+    C_min_j(const C_min_j &other)
         : m(other.m),
-        Nc(other.Nc),
-        epsilon(other.epsilon),
-        H(other.H),
-        f(other.f),
-        deltaUmin(other.deltaUmin),
-        deltaUmax(other.deltaUmax),
-        Umin(other.Umin),
-        Umax(other.Umax),
-        Ut(other.Ut),
-        deltaUt(other.deltaUt),
-        optData(other.optData),
-        std_lb(other.std_lb),
-        std_ub(other.std_ub),
-        std_x(other.std_x),
-        eigen_x(other.eigen_x)
+          Nc(other.Nc),
+          epsilon(other.epsilon),
+          H(other.H),
+          f(other.f),
+          deltaUmin(other.deltaUmin),
+          deltaUmax(other.deltaUmax),
+          Umin(other.Umin),
+          Umax(other.Umax),
+          Ut(other.Ut),
+          deltaUt(other.deltaUt),
+          optData(other.optData),
+          std_lb(other.std_lb),
+          std_ub(other.std_ub),
+          std_x(other.std_x),
+          eigen_x(other.eigen_x)
     {
     }
 
-    C_min_j& operator=(const C_min_j& other)
+    C_min_j &operator=(const C_min_j &other)
     {
         if (this != &other) // 检查自赋值
         {
@@ -132,27 +132,27 @@ public:
         return *this;
     }
 
-    C_min_j(C_min_j&& other) noexcept
+    C_min_j(C_min_j &&other) noexcept
         : m(other.m),
-        Nc(other.Nc),
-        epsilon(other.epsilon),
-        H(std::move(other.H)),
-        f(std::move(other.f)),
-        deltaUmin(std::move(other.deltaUmin)),
-        deltaUmax(std::move(other.deltaUmax)),
-        Umin(std::move(other.Umin)),
-        Umax(std::move(other.Umax)),
-        Ut(std::move(other.Ut)),
-        deltaUt(std::move(other.deltaUt)),
-        optData(std::move(other.optData)),
-        std_lb(std::move(other.std_lb)),
-        std_ub(std::move(other.std_ub)),
-        std_x(std::move(other.std_x)),
-        eigen_x(std::move(other.eigen_x))
+          Nc(other.Nc),
+          epsilon(other.epsilon),
+          H(std::move(other.H)),
+          f(std::move(other.f)),
+          deltaUmin(std::move(other.deltaUmin)),
+          deltaUmax(std::move(other.deltaUmax)),
+          Umin(std::move(other.Umin)),
+          Umax(std::move(other.Umax)),
+          Ut(std::move(other.Ut)),
+          deltaUt(std::move(other.deltaUt)),
+          optData(std::move(other.optData)),
+          std_lb(std::move(other.std_lb)),
+          std_ub(std::move(other.std_ub)),
+          std_x(std::move(other.std_x)),
+          eigen_x(std::move(other.eigen_x))
     {
     }
 
-    C_min_j& operator=(C_min_j&& other) noexcept
+    C_min_j &operator=(C_min_j &&other) noexcept
     {
         if (this != &other) // 检查自赋值
         {
@@ -193,22 +193,8 @@ public:
             Eigen::Map<Eigen::VectorXd> gradient(grad, n);
             gradient = optData->H * x_vec + optData->f;
         }
-
-//        std::cout << "Utility value = " << result << std::endl;
         return result;
     }
-
-/*    static double matrix_inconstraint(unsigned n, const double *x, double *grad, void *data)
-    {
-        double *Ab = static_cast<double *>(data);
-
-        double result = Ab[n];
-        for (unsigned index = 0; index < n; ++index)
-        {
-            result += x[index] * Ab[index];
-        }
-        return result;
-    } */
 
     std::vector<std::vector<double>> get_A(int _m, int _Nc)
     {
@@ -272,39 +258,11 @@ public:
         {
             deltaUt(i) = _std_x[i];
         }
-//        std::cout<< " deltaU: " << deltaUt(1) << " ";
         return deltaUt;
     }
 
     Eigen::VectorXd calculate_deltaUt_Jmin()
     {
-/*        const int m = 2;
-        int Nc = _Nc;
-        double epsilon = _epsilon;
-        Eigen::MatrixXd H = _H;
-        Eigen::VectorXd f = _f;
-        Eigen::VectorXd deltaUmin = _deltaUmin;
-        Eigen::VectorXd deltaUmax = _deltaUmax;
-        Eigen::VectorXd Umin = _Umin;
-        Eigen::VectorXd Umax = _Umax;
-        Eigen::VectorXd Ut = _Ut;
-
-        std::vector<double> std_lb(m * Nc + 1);
-        std::copy(deltaUmin.data(), deltaUmin.data() + m * Nc, std_lb.begin());
-        std_lb[m * Nc] = - INF;
-
-        std::vector<double> std_ub(m * Nc + 1);
-        std::copy(deltaUmax.data(), deltaUmax.data() + m * Nc, std_ub.begin());
-        std_ub[m * Nc] = INF;
-
-        Eigen::VectorXd eigen_x(m * Nc + 1);
-        eigen_x << _deltaUt, epsilon;
-        std::vector<double> std_x;
-        for (int i = 0; i < m * Nc + 1; i++)
-        {
-            std_x.push_back(eigen_x(i));
-        } */
-
         // 将H和f存储在OptimizationData中
         optData = {H, f};
 
@@ -323,8 +281,6 @@ public:
 
         // 设置优化器
         nlopt::opt opter(nlopt::algorithm::LN_COBYLA, m * Nc + 1);
-//        nlopt::opt opter(nlopt::algorithm::LD_SLSQP, m * Nc + 1);
-
 
         // 设置上下界
         opter.set_lower_bounds(std_lb);
@@ -337,7 +293,6 @@ public:
 
             double result = (x_vec.transpose() * optData->H * x_vec).value() + 2 * (optData->f.transpose() * x_vec).value();
 
-//            std::cout << "Utility value = " << result << std::endl;
             return result;
         };
         // 设置目标函数
@@ -365,27 +320,11 @@ public:
         opter.set_ftol_abs(tol);
 
         opter.set_force_stop(tol);
-//        opter.set_maxtime(0.5);
-//        opter.set_maxeval();
-
 
         // 优化
         nlopt::result result = opter.optimize(std_x, f_min);
 
-//        if (result)
-//        {
-//            std::cout << "Minimum utility = " << f_min << ", std_x = (";
-//            for (int i = 0; i < m * Nc + 1; i++)
-//            {
-//                std::cout << std_x[i];
-//                if (i != m * Nc + 1 - 1)
-//                {
-//                    std::cout << ", ";
-//                }
-//            }
-//            std::cout << ")" << std::endl;
-//        }
-        if(result)
+        if (result)
         {
             std::cout << " Minimum utility = " << f_min << ", ";
         }

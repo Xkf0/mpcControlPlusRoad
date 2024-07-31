@@ -1,6 +1,6 @@
 #ifndef MPC_ROAD_H
 #define MPC_ROAD_H
-#define PLOT_DIS(x1,y1,x2,y2)  std::sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))//两点的距离
+#define PLOT_DIS(x1, y1, x2, y2) std::sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) // 两点的距离
 #include <iostream>
 #include <math.h>
 #include <eigen3/Eigen/Dense>
@@ -99,14 +99,14 @@ private:
     static double calculate_Job(Eigen::VectorXd v_xi, int i_Np, int i_N, double d_Sob, double d_zeta, Eigen::VectorXd v_sideOb);
     static double utility(unsigned n, const double *x, double *grad, void *data);
 
-    Eigen::VectorXd filterElements(const Eigen::VectorXd& original, int i_N);
+    Eigen::VectorXd filterElements(const Eigen::VectorXd &original, int i_N);
 
 public:
     C_MPC_ROAD(double _d_q, double _d_r, Eigen::VectorXd _v_aymin, Eigen::VectorXd _v_aymax, int _i_Nc, int _i_Np, double _d_T, double _d_zeta, double _d_Sob, int _i_num);
-    C_MPC_ROAD(const C_MPC_ROAD& other);
-    C_MPC_ROAD& operator=(const C_MPC_ROAD& other);
-    C_MPC_ROAD(C_MPC_ROAD&& other) noexcept;
-    C_MPC_ROAD& operator=(C_MPC_ROAD&& other) noexcept;
+    C_MPC_ROAD(const C_MPC_ROAD &other);
+    C_MPC_ROAD &operator=(const C_MPC_ROAD &other);
+    C_MPC_ROAD(C_MPC_ROAD &&other) noexcept;
+    C_MPC_ROAD &operator=(C_MPC_ROAD &&other) noexcept;
     ~C_MPC_ROAD();
 
     // 初始化时set
@@ -125,9 +125,8 @@ public:
 
     Eigen::VectorXd get_road_best();
 
-    static C_MPC_ROAD& GetOnlyCmpc(double _d_q, double _d_r, Eigen::VectorXd _v_aymin, Eigen::VectorXd _v_aymax, int _i_Nc, int _i_Np, double _d_T, Eigen::VectorXd _v_xi0,
+    static C_MPC_ROAD &GetOnlyCmpc(double _d_q, double _d_r, Eigen::VectorXd _v_aymin, Eigen::VectorXd _v_aymax, int _i_Nc, int _i_Np, double _d_T, Eigen::VectorXd _v_xi0,
                                    Eigen::VectorXd _v_etaRef, Eigen::VectorXd _v_sideOb, double _d_zeta, double _d_Sob, int _i_N);
 };
-
 
 #endif // MPC_ROAD_H

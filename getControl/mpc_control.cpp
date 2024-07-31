@@ -1,8 +1,8 @@
 #include "mpc_control.h"
 C_MPC_CONTROLROAD::C_MPC_CONTROLROAD(int _i_n, int _i_m, double _i_Nc)
     : i_n(_i_n),
-    i_m(_i_m),
-    i_Nc(_i_Nc)
+      i_m(_i_m),
+      i_Nc(_i_Nc)
 {
     p_u = new double[i_m];
     p_chi = new double[i_n];
@@ -16,22 +16,22 @@ C_MPC_CONTROLROAD::C_MPC_CONTROLROAD(int _i_n, int _i_m, double _i_Nc)
     v_Ut = Eigen::VectorXd::Zero(i_m * i_Nc);
 }
 C_MPC_CONTROLROAD::C_MPC_CONTROLROAD(int _i_n, int _i_m, int _i_Np, int _i_Nc, double _d_k, double _d_T, double _d_qWeightStateOffset, double _d_rWeightControlIncrement, double _d_epsilonRelaxationFactor, double _d_rhoWeightCoefficient, double _d_l,
-             Eigen::VectorXd _v_deltaUmin, Eigen::VectorXd _v_deltaUmax, Eigen::VectorXd _v_Umin, Eigen::VectorXd _v_Umax, double *_p_u = nullptr, double *_p_chi = nullptr, double *_p_uRef = nullptr, double *_p_chiRef = nullptr)
+                                     Eigen::VectorXd _v_deltaUmin, Eigen::VectorXd _v_deltaUmax, Eigen::VectorXd _v_Umin, Eigen::VectorXd _v_Umax, double *_p_u = nullptr, double *_p_chi = nullptr, double *_p_uRef = nullptr, double *_p_chiRef = nullptr)
     : i_n(_i_n),
-    i_m(_i_m),
-    i_Np(_i_Np),
-    i_Nc(_i_Nc),
-    d_k(_d_k),
-    d_T(_d_T),
-    d_qWeightStateOffset(_d_qWeightStateOffset),
-    d_rWeightControlIncrement(_d_rWeightControlIncrement),
-    d_epsilonRelaxationFactor(_d_epsilonRelaxationFactor),
-    d_rhoWeightCoefficient(_d_rhoWeightCoefficient),
-    d_l(_d_l),
-    v_deltaUmin(_v_deltaUmin),
-    v_deltaUmax(_v_deltaUmax),
-    v_Umin(_v_Umin),
-    v_Umax(_v_Umax)
+      i_m(_i_m),
+      i_Np(_i_Np),
+      i_Nc(_i_Nc),
+      d_k(_d_k),
+      d_T(_d_T),
+      d_qWeightStateOffset(_d_qWeightStateOffset),
+      d_rWeightControlIncrement(_d_rWeightControlIncrement),
+      d_epsilonRelaxationFactor(_d_epsilonRelaxationFactor),
+      d_rhoWeightCoefficient(_d_rhoWeightCoefficient),
+      d_l(_d_l),
+      v_deltaUmin(_v_deltaUmin),
+      v_deltaUmax(_v_deltaUmax),
+      v_Umin(_v_Umin),
+      v_Umax(_v_Umax)
 {
     if (_p_u != nullptr)
     {
@@ -81,8 +81,8 @@ C_MPC_CONTROLROAD::C_MPC_CONTROLROAD(int _i_n, int _i_m, int _i_Np, int _i_Nc, d
     v_Ut = Eigen::VectorXd::Zero(i_m * i_Nc);
 }
 
-static C_MPC_CONTROLROAD& GetOnlyCmpc(int _i_n, int _i_m, int _i_Np, int _i_Nc, double _d_k, double _d_T, double _d_qWeightStateOffset, double _d_rWeightControlIncrement, double _d_epsilonRelaxationFactor, double _d_rhoWeightCoefficient, double _d_l,
-                          Eigen::VectorXd _v_deltaUmin, Eigen::VectorXd _v_deltaUmax, Eigen::VectorXd _v_Umin, Eigen::VectorXd _v_Umax, double *_p_u = nullptr, double *_p_chi = nullptr, double *_p_uRef = nullptr, double *_p_chiRef = nullptr)
+static C_MPC_CONTROLROAD &GetOnlyCmpc(int _i_n, int _i_m, int _i_Np, int _i_Nc, double _d_k, double _d_T, double _d_qWeightStateOffset, double _d_rWeightControlIncrement, double _d_epsilonRelaxationFactor, double _d_rhoWeightCoefficient, double _d_l,
+                                      Eigen::VectorXd _v_deltaUmin, Eigen::VectorXd _v_deltaUmax, Eigen::VectorXd _v_Umin, Eigen::VectorXd _v_Umax, double *_p_u = nullptr, double *_p_chi = nullptr, double *_p_uRef = nullptr, double *_p_chiRef = nullptr)
 {
     // 懒汉模式，不适合多线程
     static C_MPC_CONTROLROAD onlyInstance(_i_n, _i_m, _i_Np, _i_Nc, _d_k, _d_T, _d_qWeightStateOffset, _d_rWeightControlIncrement, _d_epsilonRelaxationFactor, _d_rhoWeightCoefficient, _d_l, _v_deltaUmin, _v_deltaUmax, _v_Umin, _v_Umax, _p_u, _p_chi, _p_uRef, _p_chiRef);
@@ -90,38 +90,38 @@ static C_MPC_CONTROLROAD& GetOnlyCmpc(int _i_n, int _i_m, int _i_Np, int _i_Nc, 
 }
 
 // 复制构造函数，若放到private里面则不允许复制
-C_MPC_CONTROLROAD::C_MPC_CONTROLROAD(const C_MPC_CONTROLROAD& other)
+C_MPC_CONTROLROAD::C_MPC_CONTROLROAD(const C_MPC_CONTROLROAD &other)
     : i_n(other.i_n),
-    i_m(other.i_m),
-    i_Np(other.i_Np),
-    i_Nc(other.i_Nc),
-    d_k(other.d_k),
-    d_T(other.d_T),
-    d_qWeightStateOffset(other.d_qWeightStateOffset),
-    d_rWeightControlIncrement(other.d_rWeightControlIncrement),
-    d_epsilonRelaxationFactor(other.d_epsilonRelaxationFactor),
-    d_rhoWeightCoefficient(other.d_rhoWeightCoefficient),
-    d_l(other.d_l),
-    v_deltaUmin(other.v_deltaUmin),
-    v_deltaUmax(other.v_deltaUmax),
-    v_Umin(other.v_Umin),
-    v_Umax(other.v_Umax),
-    v_deltaUt(other.v_deltaUt),
-    v_Ut(other.v_Ut),
-    m_QWeightStateOffset(other.m_QWeightStateOffset),
-    m_RWeightControlIncrement(other.m_RWeightControlIncrement),
-    m_C(other.m_C),
-    m_A1(other.m_A1),
-    m_B1(other.m_B1),
-    m_A2(other.m_A2),
-    m_B2(other.m_B2),
-    m_EDeviation(other.m_EDeviation),
-    m_psi(other.m_psi),
-    m_theta(other.m_theta),
-    m_xiCurrentState(other.m_xiCurrentState),
-    m_H(other.m_H),
-    v_f(other.v_f),
-    m_I(other.m_I)
+      i_m(other.i_m),
+      i_Np(other.i_Np),
+      i_Nc(other.i_Nc),
+      d_k(other.d_k),
+      d_T(other.d_T),
+      d_qWeightStateOffset(other.d_qWeightStateOffset),
+      d_rWeightControlIncrement(other.d_rWeightControlIncrement),
+      d_epsilonRelaxationFactor(other.d_epsilonRelaxationFactor),
+      d_rhoWeightCoefficient(other.d_rhoWeightCoefficient),
+      d_l(other.d_l),
+      v_deltaUmin(other.v_deltaUmin),
+      v_deltaUmax(other.v_deltaUmax),
+      v_Umin(other.v_Umin),
+      v_Umax(other.v_Umax),
+      v_deltaUt(other.v_deltaUt),
+      v_Ut(other.v_Ut),
+      m_QWeightStateOffset(other.m_QWeightStateOffset),
+      m_RWeightControlIncrement(other.m_RWeightControlIncrement),
+      m_C(other.m_C),
+      m_A1(other.m_A1),
+      m_B1(other.m_B1),
+      m_A2(other.m_A2),
+      m_B2(other.m_B2),
+      m_EDeviation(other.m_EDeviation),
+      m_psi(other.m_psi),
+      m_theta(other.m_theta),
+      m_xiCurrentState(other.m_xiCurrentState),
+      m_H(other.m_H),
+      v_f(other.v_f),
+      m_I(other.m_I)
 {
     // 为动态分配的内存执行深复制
     if (other.p_u != nullptr)
@@ -170,7 +170,7 @@ C_MPC_CONTROLROAD::C_MPC_CONTROLROAD(const C_MPC_CONTROLROAD& other)
 }
 
 // 复制赋值运算符
-C_MPC_CONTROLROAD& C_MPC_CONTROLROAD::operator=(const C_MPC_CONTROLROAD& other)
+C_MPC_CONTROLROAD &C_MPC_CONTROLROAD::operator=(const C_MPC_CONTROLROAD &other)
 {
     if (this != &other) // 防止自赋值
     {
@@ -264,43 +264,43 @@ C_MPC_CONTROLROAD& C_MPC_CONTROLROAD::operator=(const C_MPC_CONTROLROAD& other)
 }
 
 // 移动构造函数
-C_MPC_CONTROLROAD::C_MPC_CONTROLROAD(C_MPC_CONTROLROAD&& other) noexcept
+C_MPC_CONTROLROAD::C_MPC_CONTROLROAD(C_MPC_CONTROLROAD &&other) noexcept
     : i_n(other.i_n),
-    i_m(other.i_m),
-    i_Np(other.i_Np),
-    i_Nc(other.i_Nc),
-    d_k(other.d_k),
-    d_T(other.d_T),
-    d_qWeightStateOffset(other.d_qWeightStateOffset),
-    d_rWeightControlIncrement(other.d_rWeightControlIncrement),
-    d_epsilonRelaxationFactor(other.d_epsilonRelaxationFactor),
-    d_rhoWeightCoefficient(other.d_rhoWeightCoefficient),
-    d_l(other.d_l),
-    v_deltaUmin(std::move(other.v_deltaUmin)),
-    v_deltaUmax(std::move(other.v_deltaUmax)),
-    v_Umin(std::move(other.v_Umin)),
-    v_Umax(std::move(other.v_Umax)),
-    v_deltaUt(std::move(other.v_deltaUt)),
-    v_Ut(std::move(other.v_Ut)),
-    m_QWeightStateOffset(std::move(other.m_QWeightStateOffset)),
-    m_RWeightControlIncrement(std::move(other.m_RWeightControlIncrement)),
-    m_C(std::move(other.m_C)),
-    m_A1(std::move(other.m_A1)),
-    m_B1(std::move(other.m_B1)),
-    m_A2(std::move(other.m_A2)),
-    m_B2(std::move(other.m_B2)),
-    m_EDeviation(std::move(other.m_EDeviation)),
-    m_psi(std::move(other.m_psi)),
-    m_theta(std::move(other.m_theta)),
-    m_xiCurrentState(std::move(other.m_xiCurrentState)),
-    m_H(std::move(other.m_H)),
-    v_f(std::move(other.v_f)),
-    m_I(std::move(other.m_I)),
-    p_u(other.p_u),
-    p_chi(other.p_chi),
-    p_uRef(other.p_uRef),
-    p_chiRef(other.p_chiRef),
-    p_Ut(other.p_Ut)
+      i_m(other.i_m),
+      i_Np(other.i_Np),
+      i_Nc(other.i_Nc),
+      d_k(other.d_k),
+      d_T(other.d_T),
+      d_qWeightStateOffset(other.d_qWeightStateOffset),
+      d_rWeightControlIncrement(other.d_rWeightControlIncrement),
+      d_epsilonRelaxationFactor(other.d_epsilonRelaxationFactor),
+      d_rhoWeightCoefficient(other.d_rhoWeightCoefficient),
+      d_l(other.d_l),
+      v_deltaUmin(std::move(other.v_deltaUmin)),
+      v_deltaUmax(std::move(other.v_deltaUmax)),
+      v_Umin(std::move(other.v_Umin)),
+      v_Umax(std::move(other.v_Umax)),
+      v_deltaUt(std::move(other.v_deltaUt)),
+      v_Ut(std::move(other.v_Ut)),
+      m_QWeightStateOffset(std::move(other.m_QWeightStateOffset)),
+      m_RWeightControlIncrement(std::move(other.m_RWeightControlIncrement)),
+      m_C(std::move(other.m_C)),
+      m_A1(std::move(other.m_A1)),
+      m_B1(std::move(other.m_B1)),
+      m_A2(std::move(other.m_A2)),
+      m_B2(std::move(other.m_B2)),
+      m_EDeviation(std::move(other.m_EDeviation)),
+      m_psi(std::move(other.m_psi)),
+      m_theta(std::move(other.m_theta)),
+      m_xiCurrentState(std::move(other.m_xiCurrentState)),
+      m_H(std::move(other.m_H)),
+      v_f(std::move(other.v_f)),
+      m_I(std::move(other.m_I)),
+      p_u(other.p_u),
+      p_chi(other.p_chi),
+      p_uRef(other.p_uRef),
+      p_chiRef(other.p_chiRef),
+      p_Ut(other.p_Ut)
 {
     other.p_u = nullptr;
     other.p_chi = nullptr;
@@ -310,7 +310,7 @@ C_MPC_CONTROLROAD::C_MPC_CONTROLROAD(C_MPC_CONTROLROAD&& other) noexcept
 }
 
 // 移动赋值运算符
-C_MPC_CONTROLROAD& C_MPC_CONTROLROAD::operator=(C_MPC_CONTROLROAD&& other) noexcept
+C_MPC_CONTROLROAD &C_MPC_CONTROLROAD::operator=(C_MPC_CONTROLROAD &&other) noexcept
 {
     if (this != &other)
     {
@@ -378,7 +378,7 @@ C_MPC_CONTROLROAD::~C_MPC_CONTROLROAD()
 
 bool C_MPC_CONTROLROAD::set_n(int _i_n)
 {
-    if(_i_n > 0)
+    if (_i_n > 0)
     {
         i_n = _i_n;
         return true;
@@ -388,7 +388,7 @@ bool C_MPC_CONTROLROAD::set_n(int _i_n)
 
 bool C_MPC_CONTROLROAD::set_m(int _i_m)
 {
-    if(_i_m > 0)
+    if (_i_m > 0)
     {
         i_m = _i_m;
         return true;
@@ -398,7 +398,7 @@ bool C_MPC_CONTROLROAD::set_m(int _i_m)
 
 bool C_MPC_CONTROLROAD::set_Nc_Np(int _i_Nc, int _i_Np)
 {
-    if(_i_Nc > 0 && _i_Np > 0)
+    if (_i_Nc > 0 && _i_Np > 0)
     {
         i_Nc = _i_Nc;
         i_Np = _i_Np;
@@ -415,7 +415,7 @@ bool C_MPC_CONTROLROAD::set_k(double _d_k)
 
 bool C_MPC_CONTROLROAD::set_T(double _d_T)
 {
-    if(_d_T > 0)
+    if (_d_T > 0)
     {
         d_T = _d_T;
         return true;
@@ -425,7 +425,7 @@ bool C_MPC_CONTROLROAD::set_T(double _d_T)
 
 bool C_MPC_CONTROLROAD::set_q_r(double _d_q_weightStateOffset, double _d_r_weightControlIncrement)
 {
-    if(_d_q_weightStateOffset > 0 && _d_r_weightControlIncrement > 0)
+    if (_d_q_weightStateOffset > 0 && _d_r_weightControlIncrement > 0)
     {
         d_qWeightStateOffset = _d_q_weightStateOffset;
         d_rWeightControlIncrement = _d_r_weightControlIncrement;
@@ -436,7 +436,7 @@ bool C_MPC_CONTROLROAD::set_q_r(double _d_q_weightStateOffset, double _d_r_weigh
 
 bool C_MPC_CONTROLROAD::set_epsilon_rho(double _d_epsilonRelaxationFactor, double _d_rhoWeightCoefficient)
 {
-    if(_d_epsilonRelaxationFactor > 0 && _d_rhoWeightCoefficient > 0)
+    if (_d_epsilonRelaxationFactor > 0 && _d_rhoWeightCoefficient > 0)
     {
         d_epsilonRelaxationFactor = _d_epsilonRelaxationFactor;
         d_rhoWeightCoefficient = _d_rhoWeightCoefficient;
@@ -447,7 +447,7 @@ bool C_MPC_CONTROLROAD::set_epsilon_rho(double _d_epsilonRelaxationFactor, doubl
 
 bool C_MPC_CONTROLROAD::set_l(double _d_l)
 {
-    if(_d_l > 0)
+    if (_d_l > 0)
     {
         d_l = _d_l;
         return true;
@@ -457,7 +457,7 @@ bool C_MPC_CONTROLROAD::set_l(double _d_l)
 
 bool C_MPC_CONTROLROAD::set_deltaUmin_deltaUmax_Umin_Umax(Eigen::VectorXd _v_deltaUmin, Eigen::VectorXd _v_deltaUmax, Eigen::VectorXd _v_Umin, Eigen::VectorXd _v_Umax)
 {
-    if(_v_deltaUmin.size() != 0 && _v_deltaUmax.size() != 0 && _v_Umin.size() != 0 && _v_Umax.size() != 0)
+    if (_v_deltaUmin.size() != 0 && _v_deltaUmax.size() != 0 && _v_Umin.size() != 0 && _v_Umax.size() != 0)
     {
         v_deltaUmin = _v_deltaUmin;
         v_deltaUmax = _v_deltaUmax;
@@ -470,7 +470,7 @@ bool C_MPC_CONTROLROAD::set_deltaUmin_deltaUmax_Umin_Umax(Eigen::VectorXd _v_del
 
 bool C_MPC_CONTROLROAD::set_u(double *_p_u)
 {
-    if(_p_u != nullptr)
+    if (_p_u != nullptr)
     {
         p_u = _p_u;
         return true;
@@ -480,7 +480,7 @@ bool C_MPC_CONTROLROAD::set_u(double *_p_u)
 
 bool C_MPC_CONTROLROAD::set_uRef(double *_p_uRef)
 {
-    if(_p_uRef != nullptr)
+    if (_p_uRef != nullptr)
     {
         p_uRef = _p_uRef;
         return true;
@@ -490,7 +490,7 @@ bool C_MPC_CONTROLROAD::set_uRef(double *_p_uRef)
 
 bool C_MPC_CONTROLROAD::set_chi(double *_p_chi)
 {
-    if(_p_chi != nullptr)
+    if (_p_chi != nullptr)
     {
         p_chi = _p_chi;
         return true;
@@ -500,7 +500,7 @@ bool C_MPC_CONTROLROAD::set_chi(double *_p_chi)
 
 bool C_MPC_CONTROLROAD::set_chiRef(double *_p_chiRef)
 {
-    if(_p_chiRef != nullptr)
+    if (_p_chiRef != nullptr)
     {
         p_chiRef = _p_chiRef;
         return true;
@@ -530,12 +530,12 @@ Eigen::MatrixXd C_MPC_CONTROLROAD::get_zero(int _i_row)
 
 // 函数的功能是实现矩阵的C次幂（为一个幂乘功能，多次使用，因此单独写出来）
 Eigen::MatrixXd C_MPC_CONTROLROAD::Matrix_power(Eigen::MatrixXd &_M, int _c, int _n)
-{ // torch.mm(M,M) if c = 2
+{
     if (_c == 0)
     {
         return Eigen::MatrixXd::Identity(_n, _n); // MatrixXd为返回值类型，因为不确定维度，所以用这个
     }
-    Eigen::MatrixXd res = _M;           // 定义一个不指定维度的矩阵res，M的维度就是res的维度
+    Eigen::MatrixXd res = _M;    // 定义一个不指定维度的矩阵res，M的维度就是res的维度
     for (int i = 1; i < _c; ++i) // C代表要乘几次，从0开始循环，到C-1停止
     {
         res = res * _M;
@@ -553,7 +553,7 @@ Eigen::Matrix<double, 2, 2> C_MPC_CONTROLROAD::get_A(int _index, double *_p_uRef
 Eigen::Matrix<double, 2, 2> C_MPC_CONTROLROAD::get_B(int _index, double *_p_uRef, double *_p_chiRef, double _d_l, double _d_k)
 {
     Eigen::Matrix<double, 2, 2> m_B;
-    m_B << sin(_p_chiRef[2 * _index + 1]), 0, cos(_p_chiRef[2 * _index + 1]) * _d_k - tan(_p_uRef[2 * _index + 1]) / _d_l, - _p_uRef[2 * _index] / (_d_l * cos(_p_uRef[2 * _index + 1]) * cos(_p_uRef[2 * _index + 1]));
+    m_B << sin(_p_chiRef[2 * _index + 1]), 0, cos(_p_chiRef[2 * _index + 1]) * _d_k - tan(_p_uRef[2 * _index + 1]) / _d_l, -_p_uRef[2 * _index] / (_d_l * cos(_p_uRef[2 * _index + 1]) * cos(_p_uRef[2 * _index + 1]));
     return m_B;
 }
 
@@ -561,7 +561,7 @@ Eigen::Matrix<double, 2, 2> C_MPC_CONTROLROAD::get_B(int _index, double *_p_uRef
 Eigen::MatrixXd C_MPC_CONTROLROAD::get_psi(Eigen::MatrixXd &_m_A2, int _i_Np) // 输入没有C，是因为C为固定值，可以写在函数里面，而A2和Np不是固定值
 {
     Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> m_psi; // 和MatrixXd一个意思，都表示动态维度
-    for (int i = 1; i <= _i_Np; ++i)                       // 从1到Np次方
+    for (int i = 1; i <= _i_Np; ++i)                             // 从1到Np次方
     {
         auto _m_temp = Matrix_power(_m_A2, i, 4 * i_n);
         Eigen::MatrixXd _m_psi = m_C * _m_temp;
@@ -598,9 +598,9 @@ Eigen::MatrixXd C_MPC_CONTROLROAD::get_theta(Eigen::MatrixXd &_m_A2, Eigen::Matr
             }
             else
             {
-                Eigen::MatrixXd m_temp;      // 创造一个临时矩阵，大小为之前的行数+现在的CAB
+                Eigen::MatrixXd m_temp;                        // 创造一个临时矩阵，大小为之前的行数+现在的CAB
                 m_temp.resize(j * 2 * i_n + 2 * i_n, 2 * i_n); // 之前的行数为i*3，现在+3是为现在的行数
-                m_temp << m_col, _m_col; // 每一次循环一个新的CAB，添加到后面，循环完之后，得到一个CAB从0到Np-1次幂，竖着拼一起
+                m_temp << m_col, _m_col;                       // 每一次循环一个新的CAB，添加到后面，循环完之后，得到一个CAB从0到Np-1次幂，竖着拼一起
                 m_col = m_temp;
             }
         }
@@ -625,7 +625,7 @@ Eigen::MatrixXd C_MPC_CONTROLROAD::get_theta(Eigen::MatrixXd &_m_A2, Eigen::Matr
 Eigen::MatrixXd C_MPC_CONTROLROAD::get_xi(double *_p_u, double *_p_chi, double *_p_uRef, double *_p_chiRef)
 {
     Eigen::MatrixXd m_xi(4 * i_n, 1);
-    for(int i = 0; i < i_n; i++)
+    for (int i = 0; i < i_n; i++)
     {
         double deltaPhi = p_chi[2 * i + 1] - _p_chiRef[2 * i + 1];
         while (deltaPhi > M_PI)
@@ -659,91 +659,6 @@ Eigen::MatrixXd C_MPC_CONTROLROAD::get_xi(double *_p_u, double *_p_chi, double *
 
     return m_xi;
 }
-
-// mpc
-//void C_MPC_CONTROL::calculate_Q_R()
-//{
-//    m_QWeightStateOffset = Eigen::MatrixXd::Zero(2 * i_n * i_Np, 2 * i_n * i_Np);
-//    for (int i = 0; i < 2 * i_n * i_Np; i++)
-//    {
-//        if (i % 2 == 0)
-//        {
-//            m_QWeightStateOffset(i, i) = 35 * d_qWeightStateOffset;
-//        }
-//        else
-//        {
-//            m_QWeightStateOffset(i, i) = 20 * d_qWeightStateOffset;
-//        }
-//    }
-//    m_RWeightControlIncrement = Eigen::MatrixXd::Zero(2 * i_n * i_Nc, 2 * i_n * i_Nc);
-//    for (int i = 0; i < 2 * i_n * i_Nc; i++)
-//    {
-//        if (i % 2 == 0)
-//        {
-//            m_RWeightControlIncrement(i, i) = 20 * d_rWeightControlIncrement;
-//        }
-//        else
-//        {
-//            m_RWeightControlIncrement(i, i) = 1 * d_rWeightControlIncrement;
-//        }
-//    }
-//}
-//void C_MPC_CONTROL::calculate_Q_R()
-//{
-//    m_QWeightStateOffset = Eigen::MatrixXd::Zero(2 * i_n * i_Np, 2 * i_n * i_Np);
-//    for (int i = 0; i < 2 * i_n * i_Np; i++)
-//    {
-//        if (i % 2 == 0)
-//        {
-//            m_QWeightStateOffset(i, i) = 20 * d_qWeightStateOffset;
-//        }
-//        else
-//        {
-//            m_QWeightStateOffset(i, i) = 10 * d_qWeightStateOffset;
-//        }
-//    }
-//    m_RWeightControlIncrement = Eigen::MatrixXd::Zero(2 * i_n * i_Nc, 2 * i_n * i_Nc);
-//    for (int i = 0; i < 2 * i_n * i_Nc; i++)
-//    {
-//        if (i % 2 == 0)
-//        {
-//            m_RWeightControlIncrement(i, i) = 20 * d_rWeightControlIncrement;
-//        }
-//        else
-//        {
-//            m_RWeightControlIncrement(i, i) = 50 * d_rWeightControlIncrement;
-//        }
-//    }
-//}
-
-// Np=2
-//void C_MPC_CONTROL::calculate_Q_R()
-//{
-//    m_QWeightStateOffset = Eigen::MatrixXd::Zero(2 * i_n * i_Np, 2 * i_n * i_Np);
-//    for (int i = 0; i < 2 * i_n * i_Np; i++)
-//    {
-//        if (i % 2 == 0)
-//        {
-//            m_QWeightStateOffset(i, i) = 20 * d_qWeightStateOffset;
-//        }
-//        else
-//        {
-//            m_QWeightStateOffset(i, i) = 20 * d_qWeightStateOffset;
-//        }
-//    }
-//    m_RWeightControlIncrement = Eigen::MatrixXd::Zero(2 * i_n * i_Nc, 2 * i_n * i_Nc);
-//    for (int i = 0; i < 2 * i_n * i_Nc; i++)
-//    {
-//        if (i % 2 == 0)
-//        {
-//            m_RWeightControlIncrement(i, i) = 20 * d_rWeightControlIncrement;
-//        }
-//        else
-//        {
-//            m_RWeightControlIncrement(i, i) = 50 * d_rWeightControlIncrement;
-//        }
-//    }
-//}
 
 // lqr
 void C_MPC_CONTROLROAD::calculate_Q_R()
@@ -882,7 +797,7 @@ bool C_MPC_CONTROLROAD::update_delta_Ut(Eigen::VectorXd _v_deltaUt)
 
 bool C_MPC_CONTROLROAD::updata_Ut()
 {
-    if(v_deltaUt.size() != 2 * i_Nc)
+    if (v_deltaUt.size() != 2 * i_Nc)
     {
         return false;
     }
@@ -895,22 +810,22 @@ bool C_MPC_CONTROLROAD::updata_Ut()
     }
     v_Ut = v_Ut + v_deltaUt;
 
-    if(v_Ut(0) > v_Umax(0))
+    if (v_Ut(0) > v_Umax(0))
     {
         v_Ut(0) = v_Umax(0);
         v_deltaUt(0) = v_Umax(0) - p_Ut[0];
     }
-    if(v_Ut(0) < v_Umin(0))
+    if (v_Ut(0) < v_Umin(0))
     {
         v_Ut(0) = v_Umin(0);
         v_deltaUt(0) = v_Umin(0) - p_Ut[0];
     }
-    if(v_Ut(1) > v_Umax(1))
+    if (v_Ut(1) > v_Umax(1))
     {
         v_Ut(1) = v_Umax(1);
         v_deltaUt(1) = v_Umax(1) - p_Ut[1];
     }
-    if(v_Ut(1) < v_Umin(1))
+    if (v_Ut(1) < v_Umin(1))
     {
         v_Ut(1) = v_Umin(1);
         v_deltaUt(1) = v_Umin(1) - p_Ut[1];
@@ -955,35 +870,8 @@ bool C_MPC_CONTROLROAD::get_control_best()
 
     auto _v_deltaUt = c_min_j.calculate_deltaUt_Jmin();
 
-
-
-//    std::future<Eigen::VectorXd> future = std::async(std::launch::async, [&]{
-//        return c_min_j.calculate_deltaUt_Jmin();
-//    });
-
-//    // Wait for 1 second
-//    std::chrono::milliseconds span(1000);
-//    Eigen::VectorXd _v_deltaUt;
-//    if(future.wait_for(span) == std::future_status::timeout)
-//    {
-//        // If the function takes more than 1 second, use Zero vector
-//        _v_deltaUt = Eigen::VectorXd::Zero(i_m * i_Nc);
-//        std::cout << ", Error: MinJ,";
-//    }
-//    else
-//    {
-//        // Otherwise, get the result from the thread
-//        _v_deltaUt = future.get();
-//    }
-
-
-
     bool b_update_deltaUt = update_delta_Ut(_v_deltaUt);
     bool b_update_Ut = updata_Ut();
-//    std::cout << " p_u: " << p_u[0] << ", " << p_u[1] << ";";
-//    std::cout << " p_uRef: " << p_uRef[0] << ", " << p_uRef[1] << ";";
-//    std::cout << " p_chi: " << p_chi[0] << ", " << p_chi[1] << ";";
-//    std::cout << " p_chiRef: " << p_chiRef[0] << ", " << p_chiRef[1] << ";";
     return b_update_deltaUt && b_update_Ut;
     return 1;
 }

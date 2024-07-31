@@ -83,19 +83,14 @@ private:
     bool updata_Ut();
     void calculate_process();
 
-//    Eigen::MatrixXd get_psi0(Eigen::Matrix<double, 5, 5> &_m_A2, int _i_Np);
-//    Eigen::MatrixXd get_theta0(Eigen::Matrix<double, 5, 5> &_m_A2, Eigen::Matrix<double, 5, 2> &_m_B2, int _i_Nc, int _i_Np);
-//    void calculate_Q_R0();
-//    Eigen::MatrixXd get_zero0(int _i_n);
-
 public:
     C_MPC_CONTROLROAD(int _i_n, int _i_m, double _i_Nc);
     C_MPC_CONTROLROAD(int _i_n, int _i_m, int _i_Np, int _i_Nc, double d_k, double _d_T, double _d_qWeightStateOffset, double _d_rWeightControlIncrement, double _d_epsilonRelaxationFactor, double _d_rhoWeightCoefficient, double _d_l,
-          Eigen::VectorXd _v_deltaUmin, Eigen::VectorXd _v_deltaUmax, Eigen::VectorXd _v_Umin, Eigen::VectorXd _v_Umax, double *_p_u, double *_p_chi, double *_p_uRef, double *_p_chiRef);
-    C_MPC_CONTROLROAD(const C_MPC_CONTROLROAD& other);
-    C_MPC_CONTROLROAD& operator=(const C_MPC_CONTROLROAD& other);
-    C_MPC_CONTROLROAD(C_MPC_CONTROLROAD&& other) noexcept;
-    C_MPC_CONTROLROAD& operator=(C_MPC_CONTROLROAD&& other) noexcept;
+                      Eigen::VectorXd _v_deltaUmin, Eigen::VectorXd _v_deltaUmax, Eigen::VectorXd _v_Umin, Eigen::VectorXd _v_Umax, double *_p_u, double *_p_chi, double *_p_uRef, double *_p_chiRef);
+    C_MPC_CONTROLROAD(const C_MPC_CONTROLROAD &other);
+    C_MPC_CONTROLROAD &operator=(const C_MPC_CONTROLROAD &other);
+    C_MPC_CONTROLROAD(C_MPC_CONTROLROAD &&other) noexcept;
+    C_MPC_CONTROLROAD &operator=(C_MPC_CONTROLROAD &&other) noexcept;
     ~C_MPC_CONTROLROAD();
 
     bool set_n(int _i_n);
@@ -116,9 +111,8 @@ public:
     Eigen::VectorXd get_Ut();
     Eigen::VectorXd get_deltaUt();
 
-    static C_MPC_CONTROLROAD& GetOnlyCmpc(int _i_n, int _i_m, int _i_Np, int _i_Nc, double d_k, double _d_T, double _d_qWeightStateOffset, double _d_rWeightControlIncrement, double _d_epsilonRelaxationFactor, double _d_rhoWeightCoefficient, double _d_l,
-                              Eigen::VectorXd _v_deltaUmin, Eigen::VectorXd _v_deltaUmax, Eigen::VectorXd _v_Umin, Eigen::VectorXd _v_Umax, double *_p_u, double *_p_chi, double *_p_uRef, double *_p_chiRef);
+    static C_MPC_CONTROLROAD &GetOnlyCmpc(int _i_n, int _i_m, int _i_Np, int _i_Nc, double d_k, double _d_T, double _d_qWeightStateOffset, double _d_rWeightControlIncrement, double _d_epsilonRelaxationFactor, double _d_rhoWeightCoefficient, double _d_l,
+                                          Eigen::VectorXd _v_deltaUmin, Eigen::VectorXd _v_deltaUmax, Eigen::VectorXd _v_Umin, Eigen::VectorXd _v_Umax, double *_p_u, double *_p_chi, double *_p_uRef, double *_p_chiRef);
 };
-
 
 #endif // MPC_CONTROL_H
