@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is an MPC (Model Predictive Control)-based control and obstacle avoidance project that utilizes the Eigen and NLopt libraries for matrix calculations and nonlinear optimization. The project includes a source file named `main.cpp`, which demonstrates the application of the MPC algorithm in robot path planning and obstacle avoidance.
+This is an MPC (Model Predictive Control)-based control and obstacle avoidance project that utilizes the Eigen and NLopt libraries for matrix calculations and nonlinear optimization. The project includes source files, which demonstrates the application of the MPC algorithm in robot control and obstacle avoidance.
 
 ## Installing Dependencies and Running the Project
 
@@ -20,6 +20,8 @@ g++ -I /usr/include/eigen3 -I /usr/include -o main main.cpp -lnlopt
 ```
 
 ## Results Display
-Below is an image showcasing the results of running the code:
+Below is an image showcasing the results of running the code. The first part is the simulation image, and the second part is the actual landing image.
 
 <img height="469" src="figure/trajectory_plot.png" width="781.5"/>
+
+ <img height="180" src="figure/controlTruth.jpg" width="300"/>  <img height="180" src="figure/controlTruth0.jpg" width="300"/> 
