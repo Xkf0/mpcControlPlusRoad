@@ -24,4 +24,7 @@ Below is an image showcasing the results of running the code. The first part is 
 
 <img height="469" src="figure/trajectory_plot.png" width="781.5"/>
 
- <img height="180" src="figure/controlTruth.jpg" width="300"/>  <img height="180" src="figure/controlTruth0.jpg" width="300"/> 
+<div style="text-align: center;">
+    <img height="180" src="figure/controlTruth.jpg" width="300"/>
+    <img height="180" src="figure/controlTruth0.jpg" width="300"/>
+</div>
