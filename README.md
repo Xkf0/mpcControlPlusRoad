@@ -64,7 +64,7 @@ If you find this project useful in your research, please consider citing:
 
 ```bibtex
 @misc{mpcControlPlusRoad,
-  title={MPC Multi-Vehicle Collaboration},
+  title={MPC-Based Control and Obstacle Avoidance},
   author={Fan Xie, Xinke Liu},
   howpublished = {\url{https://github.com/Xkf0/mpcControlPlusRoad}},
   year={2024}
