@@ -26,7 +26,25 @@ g++ -I /usr/include/eigen3 -I /usr/include -o main main.cpp -lnlopt
 ## 🎉 Results Display
 Below is an image showcasing the results of running the code.
 
-### Simulation Image
+### Vehicle Control Simulation Image
+
+The following are control simulation images for vehicle speeds:
+
+- **1 m/s**:
+
+<img height="469" src="figure/trajectory_plot_speed1.png" width="781.5"/>
+
+- **2 m/s**:
+
+<img height="469" src="figure/trajectory_plot_speed2.png" width="781.5"/>
+
+- **3 m/s**:
+
+<img height="469" src="figure/trajectory_plot_speed3.png" width="781.5"/>
+
+### Vehicle Control and Obstacle Avoidance Simulation Image
+
+The following are control and obstacle avoidance simulation image:
 
 <img height="469" src="figure/trajectory_plot.png" width="781.5"/>
 
