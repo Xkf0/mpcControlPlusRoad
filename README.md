@@ -44,13 +44,10 @@ The following are control simulation images for vehicle speeds:
 
 The following are error over time images
 
-- **Yaw Angle Error**:
+|              Yaw Angle Error                                 |               Distance Error                                 |
+|:------------------------------------------------------------:|:------------------------------------------------------------:|
+| <img height="230" src="figure/theta_error.jpg" width="390"/> | <img height="230" src="figure/theta_error.jpg" width="390"/> |
 
-<img height="469" src="figure/theta_error.jpg" width="781.5"/>
-
-- **Distance Error**:
-
-<img height="469" src="figure/distance_error.jpg" width="781.5"/>
 
 ### Vehicle Control and Obstacle Avoidance Simulation Image
 
